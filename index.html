@@ -538,11 +538,6 @@
                                     ⏳ Graphique en attente
                                 </button>
                             `}
-                            ${commune.code_embed_dw ? `
-                                <button onclick="copyEmbed('${sheetName}')" class="btn btn-tertiary">
-                                    📋 Copier embed
-                                </button>
-                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -573,9 +568,9 @@
         
         // Télécharger le graphique en PNG (format mobile)
         function downloadChartPNG(chartId, communeName) {
-            // Format mobile/Instagram (800px de largeur)
-            const pngUrl = `https://datawrapper.dwcdn.net/${chartId}/800.png`;
-            const filename = `municipales_2026_${communeName.toLowerCase().replace(/\s+/g, '_')}_mobile.png`;
+            // Format mobile/Instagram avec largeur spécifiée
+            const pngUrl = `https://datawrapper.dwcdn.net/${chartId}/plain.png`;
+            const filename = `municipales_2026_${communeName.toLowerCase().replace(/\s+/g, '_')}.png`;
             
             // Créer un lien de téléchargement
             const link = document.createElement('a');
