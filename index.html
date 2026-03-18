@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipales 2026 — Résultats en direct</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #1a202c;
+            margin-bottom: 10px;
+        }
+        
+        .header .meta {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .meta .status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #48bb78;
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .search-bar input:focus {
+            border-color: #667eea;
+        }
+        
+        .communes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 24px;
+        }
+        
+        .commune-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .commune-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .commune-card h2 {
+            font-size: 22px;
+            color: #1a202c;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-d-ok, .status-g-ok { background: #c6f6d5; color: #22543d; }
+        .status-d-maj, .status-g-maj { background: #fef5e7; color: #975a16; }
+        .status-d-err, .status-g-err { background: #fed7d7; color: #742a2a; }
+        .status-att { background: #e2e8f0; color: #2d3748; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stat {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .results {
+            margin: 16px 0;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-liste {
+            flex: 1;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .result-nuance {
+            font-size: 12px;
+            color: #718096;
+            margin-left: 8px;
+        }
+        
+        .result-percent {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            min-width: 70px;
+            text-align: right;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .communes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗳️ Municipales 2026 — Résultats en direct</h1>
+            <div class="meta">
+                <span id="update-time">Chargement...</span>
+                <span class="status" id="status">● EN DIRECT</span>
+            </div>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="🔍 Rechercher une commune..." />
+        </div>
+        
+        <div id="error-container"></div>
+        <div id="loading" class="loading">Chargement des données...</div>
+        <div id="communes-container" class="communes-grid" style="display: none;"></div>
+    </div>
+    
+    <script>
+        // ⚙️ CONFIGURATION — Remplacez par l'URL de votre Google Apps Script
+        const API_URL = 'VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI';
+        
+        let allData = null;
+        let refreshInterval = null;
+        
+        // 🚀 Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            
+            // Recherche en temps réel
+            document.getElementById('search').addEventListener('input', (e) => {
+                filterCommunes(e.target.value);
+            });
+            
+            // Rafraîchissement auto toutes les 30 secondes
+            refreshInterval = setInterval(loadData, 30000);
+        });
+        
+        // 📥 Charger les données
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                allData = data;
+                updateUI(data);
+                hideError();
+                
+            } catch (error) {
+                showError('Erreur de chargement : ' + error.message);
+                console.error(error);
+            }
+        }
+        
+        // 🎨 Mettre à jour l'interface
+        function updateUI(data) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('communes-container').style.display = 'grid';
+            document.getElementById('update-time').textContent = 
+                'Dernière mise à jour : ' + data.timestamp_formatted;
+            
+            renderCommunes(data);
+        }
+        
+        // 🏙️ Afficher les communes
+        function renderCommunes(data) {
+            const container = document.getElementById('communes-container');
+            container.innerHTML = '';
+            
+            data.supervision.forEach(commune => {
+                const communeName = commune.onglet_commune.replace('_t2', '').replace('_t1', '');
+                const communeData = data.communes[commune.onglet_commune] || [];
+                
+                const card = createCommuneCard(commune, communeName, communeData);
+                container.appendChild(card);
+            });
+        }
+        
+        // 🃏 Créer une carte commune
+        function createCommuneCard(commune, name, listes) {
+            const card = document.createElement('div');
+            card.className = 'commune-card';
+            card.dataset.name = name.toLowerCase();
+            
+            // Capitaliser le nom
+            const displayName = name.split('_').map(w => 
+                w.charAt(0).toUpperCase() + w.slice(1)
+            ).join(' ');
+            
+            card.innerHTML = `
+                <h2>
+                    ${displayName}
+                    <div>
+                        <span class="status-badge status-${commune.statut_donnees.toLowerCase().replace('-', '-')}">${commune.statut_donnees}</span>
+                        <span class="status-badge status-${commune.statut_graphique.toLowerCase().replace('-', '-')}">${commune.statut_graphique}</span>
+                    </div>
+                </h2>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-label">Abstention</div>
+                        <div class="stat-value">${commune.abstention_}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Dépouillement</div>
+                        <div class="stat-value">${commune.depouillement_}</div>
+                    </div>
+                </div>
+                
+                <div class="results">
+                    ${listes.slice(0, 5).map(liste => `
+                        <div class="result-item">
+                            <div class="result-liste">
+                                ${liste.nom_liste}
+                                <span class="result-nuance">${liste.nuance}</span>
+                            </div>
+                            <div class="result-percent">${liste.resultat_}%</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="actions">
+                    ${commune.lien_graphique_dw ? `
+                        <button class="btn btn-primary" onclick="window.open('${commune.lien_graphique_dw}', '_blank')">
+                            📊 Voir graphique
+                        </button>
+                        <button class="btn btn-secondary" onclick="copyEmbed('${commune.code_embed_dw}')">
+                            📋 Copier embed
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // 🔍 Filtrer les communes
+        function filterCommunes(query) {
+            const cards = document.querySelectorAll('.commune-card');
+            const lowerQuery = query.toLowerCase();
+            
+            cards.forEach(card => {
+                const name = card.dataset.name;
+                card.style.display = name.includes(lowerQuery) ? 'block' : 'none';
+            });
+        }
+        
+        // 📋 Copier le code embed
+        function copyEmbed(embedCode) {
+            if (!embedCode) {
+                alert('Code embed non disponible');
+                return;
+            }
+            
+            navigator.clipboard.writeText(embedCode).then(() => {
+                alert('✅ Code embed copié !');
+            }).catch(err => {
+                prompt('Copiez ce code :', embedCode);
+            });
+        }
+        
+        // ⚠️ Afficher une erreur
+        function showError(message) {
+            const container = document.getElementById('error-container');
+            container.innerHTML = `<div class="error">⚠️ ${message}</div>`;
+        }
+        
+        function hideError() {
+            document.getElementById('error-container').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
