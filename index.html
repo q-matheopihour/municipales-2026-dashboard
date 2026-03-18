@@ -469,7 +469,10 @@
             
             communes.forEach(commune => {
                 const sheetName = commune.onglet_commune;
-                const listes = communesData[sheetName] || [];
+                let listes = communesData[sheetName] || [];
+                
+                // Trier les listes par pourcentage décroissant
+                listes = listes.sort((a, b) => (b['resultat_%'] || 0) - (a['resultat_%'] || 0));
                 
                 // Nom lisible
                 const nomCommune = sheetName.replace(/_t2$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
