@@ -513,7 +513,7 @@
                                 <div class="liste-item">
                                     <div style="flex: 1;">
                                         <div class="liste-name">
-                                            ${liste.tete_liste || 'Sans candidat'}
+                                            ${liste.tete_de_liste || 'Sans candidat'}
                                         </div>
                                         <div class="liste-leader">
                                             <span class="liste-nuance">${liste.nuance || ''}</span>
@@ -535,15 +535,9 @@
                                 <button onclick="copyEmbed('${sheetName}')" class="btn btn-secondary" title="Copier le code embed HTML">
                                     📋 Copier embed
                                 </button>
-                                ${pngUrl ? `
-                                    <a href="${pngUrl}" download class="btn btn-tertiary" title="Téléchargement direct PNG" style="background: #9333ea; color: white; border: none; text-decoration: none;">
-                                        📱 Export PNG
-                                    </a>
-                                ` : `
-                                    <button class="btn btn-tertiary" disabled style="background: #9333ea; color: white; border: none;">
-                                        ⏳ PNG en cours...
-                                    </button>
-                                `}
+                                <a href="https://datawrapper.dwcdn.net/${chartId}/plain.png" download="municipales_2026_${nomCommune.toLowerCase().replace(/\s+/g, '_')}.png" class="btn btn-tertiary" title="Téléchargement direct PNG" style="background: #9333ea; color: white; border: none; text-decoration: none;">
+                                    📱 Export PNG
+                                </a>
                             ` : `
                                 <button class="btn btn-tertiary" disabled>
                                     ⏳ Graphique en attente
