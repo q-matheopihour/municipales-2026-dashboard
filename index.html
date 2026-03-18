@@ -526,8 +526,8 @@
                                 <a href="https://app.datawrapper.de/chart/${chartId}/visualize" target="_blank" class="btn btn-primary">
                                     📊 Voir graphique
                                 </a>
-                                <button onclick="downloadChartPNG('${chartId}', '${nomCommune}')" class="btn btn-secondary">
-                                    📥 PNG
+                                <button onclick="downloadChartPNG('${chartId}', '${nomCommune}')" class="btn btn-secondary" title="Ouvre la page où vous pourrez télécharger le PNG">
+                                    📥 Télécharger
                                 </button>
                             ` : `
                                 <button class="btn btn-tertiary" disabled>
@@ -556,22 +556,20 @@
         }
         
         // Télécharger le graphique en PNG
-        async function downloadChartPNG(chartId, communeName) {
-            try {
-                // URL de l'image PNG Datawrapper
-                const pngUrl = `https://datawrapper.dwcdn.net/${chartId}/full.png`;
-                
-                // Télécharger
-                const a = document.createElement('a');
-                a.href = pngUrl;
-                a.download = `municipales_2026_${communeName.toLowerCase().replace(/\s+/g, '_')}.png`;
-                a.target = '_blank';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } catch (error) {
-                alert('Erreur lors du téléchargement : ' + error.message);
-            }
+        function downloadChartPNG(chartId, communeName) {
+            // URL du PNG publié sur Datawrapper
+            const pngUrl = `https://datawrapper.dwcdn.net/${chartId}/full.png`;
+            
+            // Créer un lien de téléchargement
+            const link = document.createElement('a');
+            link.href = pngUrl;
+            link.download = `municipales_2026_${communeName.toLowerCase().replace(/\s+/g, '_')}.png`;
+            link.target = '_blank';
+            
+            // Déclencher le téléchargement
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
         
         // Copier le code embed
