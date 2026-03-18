@@ -481,6 +481,9 @@
                 // Chart ID depuis le lien DW
                 const chartId = extractChartId(commune.lien_graphique_dw);
                 
+                // Lien PNG direct depuis Google Drive
+                const pngUrl = commune.lien_png_drive || null;
+                
                 html += `
                     <div class="commune-card">
                         <h2>
@@ -530,9 +533,15 @@
                                 <button onclick="copyEmbed('${sheetName}')" class="btn btn-secondary" title="Copier le code embed HTML">
                                     📋 Copier embed
                                 </button>
-                                <button onclick="downloadChartPNG('${chartId}', '${nomCommune}')" class="btn btn-tertiary" title="Export PNG pour mobile/Instagram" style="background: #9333ea; color: white; border: none;">
-                                    📱 Export PNG
-                                </button>
+                                ${pngUrl ? `
+                                    <a href="${pngUrl}" download class="btn btn-tertiary" title="Téléchargement direct PNG" style="background: #9333ea; color: white; border: none; text-decoration: none;">
+                                        📱 Export PNG
+                                    </a>
+                                ` : `
+                                    <button class="btn btn-tertiary" disabled style="background: #9333ea; color: white; border: none;">
+                                        ⏳ PNG en cours...
+                                    </button>
+                                `}
                             ` : `
                                 <button class="btn btn-tertiary" disabled>
                                     ⏳ Graphique en attente
@@ -564,24 +573,6 @@
                 // Fallback : afficher le lien
                 prompt('Copiez ce lien :', url);
             });
-        }
-        
-        // Télécharger le graphique en PNG (format mobile)
-        function downloadChartPNG(chartId, communeName) {
-            // Format mobile/Instagram avec largeur spécifiée
-            const pngUrl = `https://datawrapper.dwcdn.net/${chartId}/plain.png`;
-            const filename = `municipales_2026_${communeName.toLowerCase().replace(/\s+/g, '_')}.png`;
-            
-            // Créer un lien de téléchargement
-            const link = document.createElement('a');
-            link.href = pngUrl;
-            link.download = filename;
-            link.target = '_blank';
-            
-            // Déclencher le téléchargement
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
         
         // Copier le code embed
