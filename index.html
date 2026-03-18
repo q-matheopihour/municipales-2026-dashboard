@@ -339,6 +339,70 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Modale de mise à jour */
+        .update-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff9500;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+        
+        .modal-content h2 {
+            color: #ff9500;
+            margin: 0 0 16px 0;
+            font-size: 24px;
+        }
+        
+        .modal-content p {
+            color: #333;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        
+        .modal-small {
+            font-size: 14px !important;
+            color: #666 !important;
+            margin-top: 20px !important;
+        }
+        
         @media (max-width: 768px) {
             .communes-grid {
                 grid-template-columns: 1fr;
@@ -346,6 +410,11 @@
             
             .stats-row {
                 grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 20px;
+                padding: 30px 20px;
             }
         }
     </style>
@@ -448,15 +517,18 @@
             
             const badge = document.getElementById('status-badge');
             const warning = document.getElementById('warning-message');
+            const modal = document.getElementById('update-modal');
             
             if (isUpdating) {
                 badge.className = 'status-badge updating';
                 badge.textContent = '⚠️ MISE À JOUR EN COURS';
                 warning.style.display = 'block';
+                modal.style.display = 'flex'; // Afficher la modale
             } else {
                 badge.className = 'status-badge ready';
                 badge.textContent = '● DONNÉES À JOUR';
                 warning.style.display = 'none';
+                modal.style.display = 'none'; // Masquer la modale
             }
         }
         
@@ -605,5 +677,17 @@
         // Rafraîchissement automatique toutes les 30 secondes
         refreshInterval = setInterval(loadData, 30000);
     </script>
+
+    <!-- Modale de mise à jour -->
+    <div id="update-modal" class="update-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-spinner"></div>
+            <h2>⚠️ Mise à jour en cours</h2>
+            <p>Les données sont en cours de rafraîchissement.</p>
+            <p><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
+            <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
+        </div>
+    </div>
+
 </body>
 </html>
