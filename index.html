@@ -493,6 +493,7 @@
         let allData = null;
         let refreshInterval = null;
         let lastSupervisionTime = null;
+        let sagouinClicked = false; // Flag pour ne pas réafficher la modale après clic sagouin
         
         // Charger les données
         async function loadData() {
@@ -546,12 +547,17 @@
                 badge.className = 'status-badge updating';
                 badge.textContent = '⚠️ MISE À JOUR EN COURS';
                 warning.style.display = 'block';
-                modal.style.display = 'flex'; // Afficher la modale
+                // N'afficher la modale QUE si l'utilisateur n'a pas cliqué sur sagouin
+                if (!sagouinClicked) {
+                    modal.style.display = 'flex';
+                }
             } else {
                 badge.className = 'status-badge ready';
                 badge.textContent = '● DONNÉES À JOUR';
                 warning.style.display = 'none';
-                modal.style.display = 'none'; // Masquer la modale
+                modal.style.display = 'none';
+                // Réinitialiser le flag quand la MAJ est terminée
+                sagouinClicked = false;
             }
         }
         
@@ -560,17 +566,31 @@
             const communes = data.supervision || [];
             const communesData = data.communes || {};
             
+            // Mapping des noms de communes pour l'affichage correct
+            const communeNames = {
+                'villeneuve_d_ascq_t2': 'Villeneuve-d\'Ascq',
+                'courcelles_lès_lens_t2': 'Courcelles-lès-Lens',
+                'faches_thumesnil_t2': 'Faches-Thumesnil'
+            };
+            
             let html = '<div class="communes-grid">';
             
             communes.forEach(commune => {
                 const sheetName = commune.onglet_commune;
+                
+                // FILTRER : Ignorer l'onglet SUPERVISION lui-même
+                if (sheetName === 'SUPERVISION' || !sheetName || !sheetName.includes('_t2')) {
+                    return;
+                }
+                
                 let listes = communesData[sheetName] || [];
                 
                 // Trier les listes par pourcentage décroissant
                 listes = listes.sort((a, b) => (b['resultat_%'] || 0) - (a['resultat_%'] || 0));
                 
-                // Nom lisible
-                const nomCommune = sheetName.replace(/_t2$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                // Nom lisible : utiliser le mapping si disponible, sinon génération auto
+                const nomCommune = communeNames[sheetName] || 
+                    sheetName.replace(/_t2$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 
                 // Statuts
                 const statutData = (commune.statut_donnees || 'ATT').toLowerCase().replace('-', '-');
@@ -697,8 +717,8 @@
         // Chargement initial
         loadData();
         
-        // Rafraîchissement automatique toutes les 30 secondes
-        refreshInterval = setInterval(loadData, 30000);
+        // Rafraîchissement automatique toutes les 10 secondes
+        refreshInterval = setInterval(loadData, 10000);
     </script>
 
     <!-- Modale de mise à jour -->
@@ -709,7 +729,7 @@
             <p>Les données sont en cours de rafraîchissement.</p>
             <p><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
             <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
-            <button onclick="document.getElementById('update-modal').style.display='none'" class="sagouin-button">
+            <button onclick="sagouinClicked = true; document.getElementById('update-modal').style.display='none'" class="sagouin-button">
                 😈 J'y vais quand même, je suis un sagouin
             </button>
         </div>
