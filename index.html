@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipales 2026 — Résultats en direct</title>
+    <title>MuniData — Municipales 2026 en direct</title>
     <style>
         * {
             margin: 0;
@@ -16,6 +16,111 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           SPLASH SCREEN
+        ============================================ */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        .splash-logo {
+            animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .splash-tagline {
+            margin-top: 24px;
+            font-size: 18px;
+            color: white;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out 0.5s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .splash-loader {
+            margin-top: 40px;
+            width: 60px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 1s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .splash-loader::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0%, 100% { transform: translateX(-30px); }
+            50% { transform: translateX(60px); }
+        }
+        
+        /* ============================================
+           MAIN CONTENT (caché pendant splash)
+        ============================================ */
+        #mainContent {
+            opacity: 0;
+            animation: fadeInContent 0.6s ease-out 3s forwards;
+        }
+        
+        @keyframes fadeInContent {
+            to { opacity: 1; }
         }
         
         .container {
@@ -23,35 +128,63 @@
             margin: 0 auto;
         }
         
+        /* ============================================
+           HEADER avec LOGO
+        ============================================ */
         .header {
             background: white;
             padding: 30px;
             border-radius: 16px;
             margin-bottom: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: slideInDown 0.6s ease-out 3s both;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .header-logo {
+            width: 48px;
+            height: 48px;
         }
         
         .header h1 {
             font-size: 32px;
             color: #1a202c;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin: 0;
         }
         
         .header .meta {
             color: #718096;
             font-size: 14px;
+            margin-left: 64px;
         }
         
-        /* SUPERVISION CARD (en haut) */
+        /* ============================================
+           SUPERVISION CARD
+        ============================================ */
         .supervision-card {
             background: white;
             padding: 24px;
             border-radius: 12px;
             margin-bottom: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            animation: slideInDown 0.6s ease-out 3.1s both;
         }
         
         .supervision-header {
@@ -98,47 +231,40 @@
             50% { opacity: 0.6; }
         }
         
-        .warning-message {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: 12px;
-            font-size: 14px;
-            color: #92400e;
+        .supervision-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
         }
         
-        .warning-message strong {
-            display: block;
+        .supervision-stat {
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .supervision-stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
         
-        .search-bar {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        .supervision-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
         }
         
-        .search-bar input {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        
-        .search-bar input:focus {
-            border-color: #667eea;
-        }
-        
+        /* ============================================
+           COMMUNE CARDS GRID
+        ============================================ */
         .communes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
         }
         
         .commune-card {
@@ -146,135 +272,128 @@
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+        
+        /* Décalage progressif des cartes */
+        .commune-card:nth-child(1) { animation-delay: 3.2s; }
+        .commune-card:nth-child(2) { animation-delay: 3.3s; }
+        .commune-card:nth-child(3) { animation-delay: 3.4s; }
+        .commune-card:nth-child(4) { animation-delay: 3.5s; }
+        .commune-card:nth-child(5) { animation-delay: 3.6s; }
+        .commune-card:nth-child(6) { animation-delay: 3.7s; }
+        .commune-card:nth-child(7) { animation-delay: 3.8s; }
+        .commune-card:nth-child(8) { animation-delay: 3.9s; }
+        .commune-card:nth-child(9) { animation-delay: 4.0s; }
+        .commune-card:nth-child(10) { animation-delay: 4.1s; }
+        .commune-card:nth-child(11) { animation-delay: 4.2s; }
+        .commune-card:nth-child(12) { animation-delay: 4.3s; }
+        .commune-card:nth-child(13) { animation-delay: 4.4s; }
+        .commune-card:nth-child(14) { animation-delay: 4.5s; }
+        .commune-card:nth-child(15) { animation-delay: 4.6s; }
+        .commune-card:nth-child(16) { animation-delay: 4.7s; }
+        .commune-card:nth-child(17) { animation-delay: 4.8s; }
+        .commune-card:nth-child(18) { animation-delay: 4.9s; }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .commune-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
         }
         
-        .commune-card h2 {
-            font-size: 22px;
-            color: #1a202c;
-            margin-bottom: 16px;
+        .commune-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            margin-bottom: 16px;
         }
         
-        .status-indicators {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .status-dot {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+        .commune-name {
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        
-        .status-dot.d-ok { background: #fef3c7; color: #92400e; }
-        .status-dot.g-ok { background: #fef3c7; color: #92400e; }
-        .status-dot.d-maj { background: #d1fae5; color: #065f46; }
-        .status-dot.g-maj { background: #d1fae5; color: #065f46; }
-        .status-dot.d-err { background: #fee2e2; color: #991b1b; }
-        .status-dot.g-err { background: #fee2e2; color: #991b1b; }
-        .status-dot.att { background: #e5e7eb; color: #4b5563; }
-        
-        .stats-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-item {
-            background: #f7fafc;
-            padding: 12px;
-            border-radius: 8px;
-        }
-        
-        .stat-item label {
-            display: block;
-            font-size: 11px;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #1a202c;
             margin-bottom: 4px;
         }
         
-        .stat-item value {
-            display: block;
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
-        }
-        
-        .listes-preview {
-            margin-bottom: 20px;
-        }
-        
-        .liste-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .liste-item:last-child {
-            border-bottom: none;
-        }
-        
-        .liste-name {
-            font-weight: 600;
-            color: #2d3748;
-            flex: 1;
-        }
-        
-        .liste-leader {
+        .commune-info {
             font-size: 13px;
             color: #718096;
-            margin-right: 12px;
         }
         
-        .liste-nuance {
-            font-size: 12px;
+        .commune-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .commune-status.data-ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .commune-status.data-pending {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7fafc;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-placeholder {
             color: #a0aec0;
-            margin-left: 8px;
+            font-size: 14px;
+            text-align: center;
         }
         
-        .liste-result {
-            font-size: 18px;
-            font-weight: 700;
-            color: #667eea;
-            min-width: 80px;
-            text-align: right;
+        .chart-container iframe {
+            border: none;
+            width: 100%;
+            min-height: 400px;
         }
         
-        .actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
+        .commune-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
         }
         
         .btn {
-            padding: 12px 16px;
+            flex: 1;
+            padding: 10px 16px;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
             font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
+            transition: all 0.2s ease;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            text-decoration: none;
-            white-space: nowrap;
         }
         
         .btn-primary {
@@ -284,456 +403,306 @@
         
         .btn-primary:hover {
             background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transform: translateY(-1px);
         }
         
         .btn-secondary {
-            background: #48bb78;
-            color: white;
+            background: #edf2f7;
+            color: #4a5568;
         }
         
         .btn-secondary:hover {
-            background: #38a169;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+            background: #e2e8f0;
+            transform: translateY(-1px);
         }
         
-        .btn-tertiary {
-            background: #f7fafc;
-            color: #4a5568;
-            border: 2px solid #e2e8f0;
+        .btn:active {
+            transform: translateY(0);
         }
         
-        .btn-tertiary:hover {
-            background: #edf2f7;
-            border-color: #cbd5e0;
-        }
-        
-        .error-state {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        
-        .loading-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: white;
-            font-size: 18px;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Modale de mise à jour */
-        .update-modal {
+        /* Modal sagouin */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
             justify-content: center;
-            z-index: 9999;
-            backdrop-filter: blur(4px);
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.2s ease;
         }
         
         .modal-content {
             background: white;
-            padding: 40px;
+            padding: 32px;
             border-radius: 16px;
             max-width: 500px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalFadeIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .modal-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #ff9500;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 24px;
-        }
-        
-        .modal-content h2 {
-            color: #ff9500;
-            margin: 0 0 16px 0;
+        .modal h2 {
             font-size: 24px;
+            margin-bottom: 16px;
+            color: #1a202c;
         }
         
-        .modal-content p {
-            color: #333;
-            margin: 12px 0;
-            font-size: 16px;
+        .modal p {
+            color: #4a5568;
+            margin-bottom: 24px;
+            line-height: 1.6;
         }
         
-        .modal-small {
-            font-size: 14px !important;
-            color: #666 !important;
-            margin-top: 20px !important;
+        .modal-actions {
+            display: flex;
+            gap: 12px;
         }
         
-        .sagouin-button {
-            margin-top: 24px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        .modal-actions .btn {
+            flex: 1;
         }
         
-        .sagouin-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        
-        .sagouin-button:active {
-            transform: translateY(0);
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
             .communes-grid {
                 grid-template-columns: 1fr;
             }
             
-            .stats-row {
-                grid-template-columns: 1fr;
+            .header h1 {
+                font-size: 24px;
             }
             
-            .modal-content {
-                margin: 20px;
-                padding: 30px 20px;
+            .supervision-content {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- En-tête -->
-        <div class="header">
-            <h1>
-                🗳️ Municipales 2026 — Résultats en direct
-            </h1>
-            <div class="meta">
-                Dernière mise à jour : <span id="last-update-time">Chargement...</span>
+    <!-- SPLASH SCREEN -->
+    <div id="splashScreen">
+        <svg class="splash-logo" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Logo MuniData -->
+            <!-- Icône : graphique en barres stylisé -->
+            <g>
+                <!-- Barre 1 -->
+                <rect x="40" y="100" width="25" height="60" fill="white" opacity="0.9" rx="4">
+                    <animate attributeName="height" values="60;80;60" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+                    <animate attributeName="y" values="100;80;100" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+                </rect>
+                <!-- Barre 2 -->
+                <rect x="75" y="80" width="25" height="80" fill="white" opacity="0.9" rx="4">
+                    <animate attributeName="height" values="80;100;80" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+                    <animate attributeName="y" values="80;60;80" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+                </rect>
+                <!-- Barre 3 -->
+                <rect x="110" y="70" width="25" height="90" fill="white" opacity="0.9" rx="4">
+                    <animate attributeName="height" values="90;110;90" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+                    <animate attributeName="y" values="70;50;70" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+                </rect>
+                <!-- Barre 4 -->
+                <rect x="145" y="90" width="25" height="70" fill="white" opacity="0.9" rx="4">
+                    <animate attributeName="height" values="70;90;70" dur="1.5s" repeatCount="indefinite" begin="0.9s"/>
+                    <animate attributeName="y" values="90;70;90" dur="1.5s" repeatCount="indefinite" begin="0.9s"/>
+                </rect>
+            </g>
+            
+            <!-- Texte MuniData -->
+            <text x="100" y="50" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="white" text-anchor="middle">
+                MuniData
+            </text>
+        </svg>
+        
+        <div class="splash-tagline">Municipales 2026 en direct</div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="mainContent">
+        <div class="container">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-top">
+                    <!-- Mini logo -->
+                    <svg class="header-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="40" y="100" width="25" height="60" fill="#667eea" rx="4"/>
+                        <rect x="75" y="80" width="25" height="80" fill="#667eea" rx="4"/>
+                        <rect x="110" y="70" width="25" height="90" fill="#667eea" rx="4"/>
+                        <rect x="145" y="90" width="25" height="70" fill="#667eea" rx="4"/>
+                    </svg>
+                    <h1>MuniData</h1>
+                </div>
+                <div class="meta">
+                    Municipales 2026 — Résultats en direct · Second tour
+                </div>
+            </div>
+
+            <!-- SUPERVISION -->
+            <div class="supervision-card">
+                <div class="supervision-header">
+                    <h2>📊 Vue d'ensemble</h2>
+                    <div class="last-update">
+                        <span id="lastUpdateTime">Chargement...</span>
+                        <span class="status-badge ready" id="globalStatus">Prêt</span>
+                    </div>
+                </div>
+                <div class="supervision-content" id="supervisionStats">
+                    <!-- Stats injectées par JS -->
+                </div>
+            </div>
+
+            <!-- COMMUNES GRID -->
+            <div class="communes-grid" id="communesGrid">
+                <!-- Cartes injectées par JS -->
             </div>
         </div>
+    </div>
 
-        <!-- SUPERVISION CARD EN HAUT -->
-        <div class="supervision-card" id="supervision-card">
-            <div class="supervision-header">
-                <h2>📊 État de la supervision</h2>
-                <span class="status-badge ready" id="status-badge">
-                    ● EN DIRECT
-                </span>
-            </div>
-            <div class="last-update">
-                <strong>Dernière synchronisation :</strong>
-                <span id="supervision-timestamp">—</span>
-            </div>
-            <div class="warning-message" id="warning-message" style="display: none;">
-                <strong>⚠️ Mise à jour en cours</strong>
-                Les données sont en cours de rafraîchissement. Ne copiez/téléchargez pas les graphiques pour le moment.
-            </div>
-        </div>
-
-        <!-- Barre de recherche -->
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="🔍 Rechercher une commune...">
-        </div>
-
-        <!-- Zone de contenu -->
-        <div id="content">
-            <div class="loading-state">
-                <div class="loading-spinner"></div>
-                Chargement des données...
+    <!-- MODAL MISE À JOUR -->
+    <div class="modal" id="updateModal">
+        <div class="modal-content">
+            <h2>🔄 Mise à jour en cours</h2>
+            <p>De nouvelles données sont en train d'être intégrées. Les graphiques vont se mettre à jour automatiquement.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">OK, compris</button>
+                <button class="btn btn-primary" onclick="closeSagouin()">Ne plus afficher</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ⚙️ CONFIGURATION — URL de l'API Google Apps Script
         const API_URL = 'https://script.google.com/macros/s/AKfycbzbaat2Wv42TtnimI7hGB6nZeLleNhuAa58I8mxHj412yjHhdsjApmzvdRqbSKIOM0MPA/exec';
-        
-        let allData = null;
-        let refreshInterval = null;
-        let lastSupervisionTime = null;
-        let sagouinClicked = false; // Flag pour ne pas réafficher la modale après clic sagouin
-        
-        // Charger les données
-        async function loadData() {
+        let previousData = null;
+        let sagouinClicked = localStorage.getItem('sagouinClicked') === 'true';
+
+        async function fetchData() {
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                allData = data;
-                lastSupervisionTime = data.timestamp_formatted;
+                // Détecter MAJ en cours
+                const hasUpdating = data.communes.some(c => c.statut_graph === 'G-MAJ');
                 
-                // Détecter si mise à jour en cours
-                const isUpdating = detectIfUpdating(data.supervision);
-                updateSupervisionCard(data.timestamp_formatted, isUpdating);
+                if (hasUpdating && !sagouinClicked) {
+                    document.getElementById('updateModal').classList.add('show');
+                }
                 
-                // Afficher les communes
-                displayCommunes(data);
+                displaySupervision(data);
+                displayCommunes(data.communes);
                 
-                // Mettre à jour le timestamp global
-                document.getElementById('last-update-time').textContent = data.timestamp_formatted;
-                
+                previousData = data;
             } catch (error) {
-                console.error('Erreur:', error);
-                document.getElementById('content').innerHTML = `
-                    <div class="error-state">
-                        <h3>❌ Erreur de chargement</h3>
-                        <p>${error.message}</p>
-                    </div>
-                `;
+                console.error('Erreur fetch:', error);
             }
         }
-        
-        // Détecter si une mise à jour est en cours
-        function detectIfUpdating(supervision) {
-            if (!supervision || supervision.length === 0) return false;
+
+        function displaySupervision(data) {
+            const stats = [
+                { label: 'Communes suivies', value: data.communes.length },
+                { label: 'Données à jour', value: data.communes.filter(c => c.statut_data === 'D-OK').length },
+                { label: 'Graphiques OK', value: data.communes.filter(c => c.statut_graph === 'G-OK' || c.statut_graph === 'G-MAJ').length }
+            ];
             
-            // Si au moins une commune est en ATT, c'est qu'une mise à jour est en cours
-            return supervision.some(c => 
-                c.statut_donnees === 'ATT' || c.statut_graphique === 'ATT'
-            );
+            document.getElementById('supervisionStats').innerHTML = stats.map(s => `
+                <div class="supervision-stat">
+                    <div class="supervision-stat-label">${s.label}</div>
+                    <div class="supervision-stat-value">${s.value}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('lastUpdateTime').textContent = `Dernière MAJ : ${new Date().toLocaleTimeString('fr-FR')}`;
         }
-        
-        // Mettre à jour la carte de supervision
-        function updateSupervisionCard(timestamp, isUpdating) {
-            document.getElementById('supervision-timestamp').textContent = timestamp || '—';
+
+        function displayCommunes(communes) {
+            const grid = document.getElementById('communesGrid');
             
-            const badge = document.getElementById('status-badge');
-            const warning = document.getElementById('warning-message');
-            const modal = document.getElementById('update-modal');
+            // Filtrer SUPERVISION
+            const filtered = communes.filter(c => c.nom_onglet !== 'SUPERVISION');
             
-            if (isUpdating) {
-                badge.className = 'status-badge updating';
-                badge.textContent = '⚠️ MISE À JOUR EN COURS';
-                warning.style.display = 'block';
-                // N'afficher la modale QUE si l'utilisateur n'a pas cliqué sur sagouin
-                if (!sagouinClicked) {
-                    modal.style.display = 'flex';
-                }
-            } else {
-                badge.className = 'status-badge ready';
-                badge.textContent = '● DONNÉES À JOUR';
-                warning.style.display = 'none';
-                modal.style.display = 'none';
-                // Réinitialiser le flag quand la MAJ est terminée
-                sagouinClicked = false;
-            }
-        }
-        
-        // Afficher les communes
-        function displayCommunes(data) {
-            const communes = data.supervision || [];
-            const communesData = data.communes || {};
-            
-            // Mapping des noms de communes pour l'affichage correct
-            const communeNames = {
-                'villeneuve_d_ascq_t2': 'Villeneuve-d\'Ascq',
-                'courcelles_lès_lens_t2': 'Courcelles-lès-Lens',
-                'faches_thumesnil_t2': 'Faches-Thumesnil'
-            };
-            
-            let html = '<div class="communes-grid">';
-            
-            communes.forEach(commune => {
-                const sheetName = commune.onglet_commune;
+            grid.innerHTML = filtered.map(commune => {
+                const nomCommune = commune.nom_onglet
+                    .replace(/_t2$/, '')
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, l => l.toUpperCase())
+                    .replace(/Villeneuve D Ascq/, "Villeneuve-d'Ascq")
+                    .replace(/Courcelles Les Lens/, 'Courcelles-lès-Lens')
+                    .replace(/Faches Thumesnil/, 'Faches-Thumesnil');
                 
-                // FILTRER : Ignorer l'onglet SUPERVISION lui-même
-                if (sheetName === 'SUPERVISION' || !sheetName || !sheetName.includes('_t2')) {
-                    return;
-                }
+                const hasChart = commune.statut_graph === 'G-OK' || commune.statut_graph === 'G-MAJ';
+                const chartId = hasChart ? commune.embed_code?.match(/datawrapper-chart-([^"]+)/)?.[1] : null;
                 
-                let listes = communesData[sheetName] || [];
-                
-                // Trier les listes par pourcentage décroissant
-                listes = listes.sort((a, b) => (b['resultat_%'] || 0) - (a['resultat_%'] || 0));
-                
-                // Nom lisible : utiliser le mapping si disponible, sinon génération auto
-                const nomCommune = communeNames[sheetName] || 
-                    sheetName.replace(/_t2$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                
-                // Statuts
-                const statutData = (commune.statut_donnees || 'ATT').toLowerCase().replace('-', '-');
-                const statutGraph = (commune.statut_graphique || 'ATT').toLowerCase().replace('-', '-');
-                
-                // Chart ID depuis le lien DW
-                const chartId = extractChartId(commune.lien_graphique_dw);
-                
-                // Lien PNG direct depuis Google Drive
-                const pngUrl = commune.lien_png_drive || null;
-                
-                html += `
+                return `
                     <div class="commune-card">
-                        <h2>
-                            <span>${nomCommune}</span>
-                            <div class="status-indicators">
-                                <span class="status-dot ${statutData}">${commune.statut_donnees || 'ATT'}</span>
-                                <span class="status-dot ${statutGraph}">${commune.statut_graphique || 'ATT'}</span>
-                            </div>
-                        </h2>
-                        
-                        <div class="stats-row">
-                            <div class="stat-item">
-                                <label>Abstention</label>
-                                <value>${commune['abstention_%'] || '—'}%</value>
-                            </div>
-                            <div class="stat-item">
-                                <label>Dépouillement</label>
-                                <value>${commune['depouillement_%'] || '—'}%</value>
-                            </div>
-                        </div>
-                        
-                        <div class="listes-preview">
-                            ${listes.slice(0, 5).map(liste => `
-                                <div class="liste-item">
-                                    <div style="flex: 1;">
-                                        <div class="liste-name">
-                                            ${liste.tete_de_liste || 'Sans candidat'}
-                                        </div>
-                                        <div class="liste-leader">
-                                            <span class="liste-nuance">${liste.nuance || ''}</span>
-                                        </div>
-                                    </div>
-                                    <div class="liste-result">
-                                        ${liste['resultat_%'] || '0'}%
-                                    </div>
+                        <div class="commune-header">
+                            <div>
+                                <div class="commune-name">${nomCommune}</div>
+                                <div class="commune-info">
+                                    ${commune.abstention ? `Abstention : ${commune.abstention}%` : ''}
+                                    ${commune.depouillement ? ` · Dépouillement : ${commune.depouillement}%` : ''}
                                 </div>
-                            `).join('')}
-                            ${listes.length > 5 ? `<div style="text-align: center; color: #a0aec0; font-size: 13px; margin-top: 8px;">+ ${listes.length - 5} autres listes</div>` : ''}
+                            </div>
+                            <span class="commune-status ${commune.statut_data === 'D-OK' ? 'data-ok' : 'data-pending'}">
+                                ${commune.statut_data === 'D-OK' ? 'Données OK' : 'En attente'}
+                            </span>
                         </div>
                         
-                        <div class="actions">
-                            ${chartId ? `
-                                <button onclick="copyLink('${chartId}', '${nomCommune}')" class="btn btn-primary" title="Copier le lien du graphique">
+                        <div class="chart-container">
+                            ${hasChart && chartId ? 
+                                `<iframe src="https://datawrapper.dwcdn.net/${chartId}/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400"></iframe>` :
+                                `<div class="chart-placeholder">📊 Graphique en attente</div>`
+                            }
+                        </div>
+                        
+                        ${hasChart ? `
+                            <div class="commune-actions">
+                                <button class="btn btn-primary" onclick="copyLink('${commune.lien_graphique}')">
                                     🔗 Copier lien
                                 </button>
-                                <button onclick="copyEmbed('${sheetName}')" class="btn btn-secondary" title="Copier le code embed HTML">
+                                <button class="btn btn-secondary" onclick="copyEmbed('${commune.embed_code?.replace(/'/g, "\\'")}')">
                                     📋 Copier embed
                                 </button>
-                                <a href="https://app.datawrapper.de/chart/${chartId}/visualize" target="_blank" class="btn btn-tertiary" title="Ouvrir dans Datawrapper (permet téléchargement PNG)" style="background: #9333ea; color: white; border: none; text-decoration: none;">
-                                    📱 Export PNG
-                                </a>
-                            ` : `
-                                <button class="btn btn-tertiary" disabled>
-                                    ⏳ Graphique en attente
+                                <button class="btn btn-secondary" onclick="window.open('${commune.lien_graphique}', '_blank')">
+                                    📈 Ouvrir DW
                                 </button>
-                            `}
-                        </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
-            });
-            
-            html += '</div>';
-            document.getElementById('content').innerHTML = html;
+            }).join('');
         }
-        
-        // Extraire l'ID du chart depuis l'URL Datawrapper
-        function extractChartId(url) {
-            if (!url) return null;
-            const match = url.match(/chart\/([^\/]+)/);
-            return match ? match[1] : null;
+
+        function copyLink(link) {
+            navigator.clipboard.writeText(link);
+            alert('✓ Lien copié !');
         }
-        
-        // Copier le lien du graphique
-        function copyLink(chartId, communeName) {
-            const url = `https://datawrapper.dwcdn.net/${chartId}`;
-            
-            navigator.clipboard.writeText(url).then(() => {
-                alert('✅ Lien copié !');
-            }).catch(err => {
-                // Fallback : afficher le lien
-                prompt('Copiez ce lien :', url);
-            });
+
+        function copyEmbed(code) {
+            const decoded = code.replace(/\\'/g, "'");
+            navigator.clipboard.writeText(decoded);
+            alert('✓ Code embed copié !');
         }
-        
-        // Copier le code embed
-        function copyEmbed(sheetName) {
-            if (!allData || !allData.supervision) return;
-            
-            const commune = allData.supervision.find(c => c.onglet_commune === sheetName);
-            if (!commune || !commune.code_embed_dw) {
-                alert('Code embed non disponible');
-                return;
-            }
-            
-            navigator.clipboard.writeText(commune.code_embed_dw).then(() => {
-                alert('✅ Code embed copié !');
-            }).catch(err => {
-                alert('❌ Erreur de copie : ' + err);
-            });
+
+        function closeModal() {
+            document.getElementById('updateModal').classList.remove('show');
         }
-        
-        // Recherche
-        document.getElementById('search').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.commune-card');
-            
-            cards.forEach(card => {
-                const name = card.querySelector('h2 span').textContent.toLowerCase();
-                card.style.display = name.includes(query) ? 'block' : 'none';
-            });
-        });
-        
-        // Chargement initial
-        loadData();
-        
-        // Rafraîchissement automatique toutes les 10 secondes
-        refreshInterval = setInterval(loadData, 10000);
+
+        function closeSagouin() {
+            sagouinClicked = true;
+            localStorage.setItem('sagouinClicked', 'true');
+            closeModal();
+        }
+
+        // Initial fetch et refresh toutes les 10s
+        fetchData();
+        setInterval(fetchData, 10000);
     </script>
-
-    <!-- Modale de mise à jour -->
-    <div id="update-modal" class="update-modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-spinner"></div>
-            <h2>⚠️ Mise à jour en cours</h2>
-            <p>Les données sont en cours de rafraîchissement.</p>
-            <p><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
-            <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
-            <button onclick="sagouinClicked = true; document.getElementById('update-modal').style.display='none'" class="sagouin-button">
-                😈 J'y vais quand même, je suis un sagouin
-            </button>
-        </div>
-    </div>
-
 </body>
 </html>
