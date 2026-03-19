@@ -637,10 +637,6 @@
                                 <label>Dépouillement</label>
                                 <value>${commune['depouillement_%'] || '—'}%</value>
                             </div>
-                            <div class="stat-item">
-                                <label>Sièges attribués</label>
-                                <value>${listes.reduce((sum, l) => sum + (parseInt(l.sieges) || 0), 0)}</value>
-                            </div>
                         </div>
                         
                         <div class="listes-preview">
