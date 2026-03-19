@@ -247,12 +247,28 @@
             margin-left: 8px;
         }
         
+        .liste-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        
         .liste-result {
             font-size: 18px;
             font-weight: 700;
             color: #667eea;
             min-width: 80px;
             text-align: right;
+        }
+        
+        .liste-sieges {
+            font-size: 12px;
+            font-weight: 600;
+            color: #718096;
+            background: #f7fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
         }
         
         .actions {
@@ -621,6 +637,10 @@
                                 <label>Dépouillement</label>
                                 <value>${commune['depouillement_%'] || '—'}%</value>
                             </div>
+                            <div class="stat-item">
+                                <label>Sièges attribués</label>
+                                <value>${listes.reduce((sum, l) => sum + (parseInt(l.sieges) || 0), 0)}</value>
+                            </div>
                         </div>
                         
                         <div class="listes-preview">
@@ -634,8 +654,11 @@
                                             <span class="liste-nuance">${liste.nuance || ''}</span>
                                         </div>
                                     </div>
-                                    <div class="liste-result">
-                                        ${liste['resultat_%'] || '0'}%
+                                    <div class="liste-stats">
+                                        <div class="liste-result">
+                                            ${liste['resultat_%'] || '0'}%
+                                        </div>
+                                        ${liste.sieges ? `<div class="liste-sieges">${liste.sieges} siège${liste.sieges > 1 ? 's' : ''}</div>` : ''}
                                     </div>
                                 </div>
                             `).join('')}
