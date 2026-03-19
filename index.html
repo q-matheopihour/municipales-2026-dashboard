@@ -212,6 +212,23 @@
             transform: translateY(0);
         }
         
+        .btn-apply-promo {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        
+        .btn-apply-promo:hover {
+            background: #5568d3;
+        }
+        
         .paywall-footer {
             text-align: center;
             margin-top: 24px;
@@ -703,7 +720,10 @@
                     
                     <div class="form-group">
                         <label class="form-label">Code promo (optionnel)</label>
-                        <input type="text" class="form-input" id="promo-input" placeholder="" oninput="checkPromo()">
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" class="form-input" id="promo-input" placeholder="" style="flex: 1;">
+                            <button type="button" class="btn-apply-promo" onclick="applyPromo()">Appliquer</button>
+                        </div>
                     </div>
                     
                     <button type="submit" class="btn-pay" id="pay-btn">
@@ -812,22 +832,27 @@
             }
         }
         
-        // Check promo code
-        function checkPromo() {
+        // Apply promo code
+        function applyPromo() {
             const promoInput = document.getElementById('promo-input');
             const promoApplied = document.getElementById('promo-applied');
-            const finalPrice = document.getElementById('final-price');
+            const priceAmount = document.getElementById('price-amount');
+            const pricePeriod = document.getElementById('price-period');
+            const payBtn = document.getElementById('pay-btn');
             
             if (promoInput.value.toUpperCase() === 'FOXY') {
+                // Afficher le badge
                 promoApplied.classList.add('show');
-                finalPrice.textContent = '0€';
-            } else {
-                promoApplied.classList.remove('show');
-                if (currentBilling === 'monthly') {
-                    finalPrice.textContent = '18,99€';
-                } else {
-                    finalPrice.textContent = '215,88€';
-                }
+                
+                // Changer le prix affiché en haut
+                priceAmount.textContent = '0€';
+                pricePeriod.textContent = 'gratuit';
+                
+                // Changer le bouton
+                payBtn.innerHTML = '🎉 C\'est parti !';
+            } else if (promoInput.value !== '') {
+                // Code invalide
+                alert('❌ Code promo invalide');
             }
         }
         
