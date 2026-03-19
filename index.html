@@ -27,12 +27,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 10000;
             display: none;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.3s ease;
+            padding: 20px;
         }
         
         #paywall.show {
@@ -45,12 +46,35 @@
         }
         
         .paywall-container {
-            background: white;
-            border-radius: 12px;
-            max-width: 500px;
+            background: transparent;
+            border-radius: 0;
+            max-width: 1200px;
             width: 90%;
+            padding: 0;
+            box-shadow: none;
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .paywall-left {
+            flex: 1;
+            color: white;
+        }
+        
+        .paywall-message {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        
+        .paywall-right {
+            width: 500px;
+            background: white;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         .paywall-header {
@@ -59,7 +83,7 @@
         }
         
         .paywall-logo {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
@@ -622,71 +646,79 @@
     <!-- PAYWALL OVERLAY -->
     <div id="paywall">
         <div class="paywall-container">
-            <div class="paywall-header">
-                <div class="paywall-logo">MuniData Premium</div>
-                <div class="paywall-subtitle">Accès illimité aux résultats en temps réel</div>
-            </div>
-            
-            <div class="billing-toggle">
-                <button class="billing-option active" id="monthly-btn" onclick="switchBilling('monthly')">
-                    Mensuel
-                </button>
-                <button class="billing-option" id="yearly-btn" onclick="switchBilling('yearly')">
-                    Annuel
-                </button>
-            </div>
-            
-            <div class="price-display">
-                <div class="price-amount" id="price-amount">18,99€</div>
-                <div class="price-period" id="price-period">par mois</div>
-                <div class="price-savings" id="price-savings" style="display: none;">
-                    💰 Économisez 12€ par an
+            <div class="paywall-left">
+                <div class="paywall-message">
+                    Tout travail mérite<br>un salaire.<br>Le nôtre chiffre<br>pas mal.
                 </div>
             </div>
             
-            <div class="promo-applied" id="promo-applied">
-                🎉 Code promo appliqué ! Abonnement gratuit
-            </div>
-            
-            <form id="payment-form" onsubmit="handlePayment(event)">
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="damien@example.com" required>
+            <div class="paywall-right">
+                <div class="paywall-header">
+                    <div class="paywall-logo">MuniData</div>
+                    <div class="paywall-subtitle">Accès illimité aux résultats en temps réel</div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Numéro de carte</label>
-                    <input type="text" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" required>
+                <div class="billing-toggle">
+                    <button class="billing-option active" id="monthly-btn" onclick="switchBilling('monthly')">
+                        Mensuel
+                    </button>
+                    <button class="billing-option" id="yearly-btn" onclick="switchBilling('yearly')">
+                        Annuel
+                    </button>
                 </div>
                 
-                <div class="card-row">
-                    <div class="form-group">
-                        <label class="form-label">Expiration</label>
-                        <input type="text" class="form-input" placeholder="MM / AA" maxlength="7" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">CVV</label>
-                        <input type="text" class="form-input" placeholder="123" maxlength="3" required>
+                <div class="price-display">
+                    <div class="price-amount" id="price-amount">18,99€</div>
+                    <div class="price-period" id="price-period">par mois</div>
+                    <div class="price-savings" id="price-savings" style="display: none;">
+                        💰 Économisez 12€ par an
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Code promo (optionnel)</label>
-                    <input type="text" class="form-input" id="promo-input" placeholder="DAMIEN" oninput="checkPromo()">
+                <div class="promo-applied" id="promo-applied">
+                    🎉 Code promo appliqué ! Abonnement gratuit
                 </div>
                 
-                <button type="submit" class="btn-pay" id="pay-btn">
-                    💳 Payer <span id="final-price">18,99€</span>
-                </button>
-            </form>
-            
-            <div class="paywall-footer">
-                Paiement sécurisé · Annulez à tout moment
-                <div class="stripe-badge">
-                    <svg width="32" height="14" viewBox="0 0 32 14" fill="#635bff">
-                        <path d="M32 6.77c0-3.74-1.82-6.77-5.24-6.77-3.43 0-5.56 3.03-5.56 6.74 0 4.46 2.52 6.74 6.13 6.74 1.76 0 3.09-.4 4.08-.96v-2.87c-1 .52-2.14.83-3.6.83-1.43 0-2.69-.5-2.86-2.23h7.02c0-.2.03-.99.03-1.48zm-7.11-1.05c0-1.66 1.02-2.33 1.85-2.33.81 0 1.76.67 1.76 2.33h-3.61zM18.23.31c-1.39 0-2.28.65-2.77 1.1l-.18-.87h-3.1v13.13l3.53-.75.01-3.19c.5.37 1.24.88 2.45.88 2.48 0 4.73-1.99 4.73-6.82.01-4.29-2.29-6.48-4.67-6.48zm-.85 10.16c-.81 0-1.29-.29-1.62-.65l-.01-5.12c.35-.39.84-.68 1.63-.68 1.24 0 2.1 1.39 2.1 3.21 0 1.87-.84 3.24-2.1 3.24zM8.82 1.88l-3.56.76v9.7h3.56V5.61c.67-.87 1.8-.71 2.15-.59V1.73c-.36-.13-1.67-.35-2.15.15zM2.83 3.3L2.65 1.9H0v10.44h3.53V6.77c.83-1.09 2.24-.89 2.68-.73V2.71c-.46-.17-2.05-.45-2.68.59V3.3z"/>
-                    </svg>
-                    Powered by Stripe
+                <form id="payment-form" onsubmit="handlePayment(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="damien@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Numéro de carte</label>
+                        <input type="text" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" required>
+                    </div>
+                    
+                    <div class="card-row">
+                        <div class="form-group">
+                            <label class="form-label">Expiration</label>
+                            <input type="text" class="form-input" placeholder="MM / AA" maxlength="7" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-input" placeholder="123" maxlength="3" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Code promo (optionnel)</label>
+                        <input type="text" class="form-input" id="promo-input" placeholder="" oninput="checkPromo()">
+                    </div>
+                    
+                    <button type="submit" class="btn-pay" id="pay-btn">
+                        💳 Payer <span id="final-price">18,99€</span>
+                    </button>
+                </form>
+                
+                <div class="paywall-footer">
+                    Paiement sécurisé · Annulez à tout moment
+                    <div class="stripe-badge">
+                        <svg width="32" height="14" viewBox="0 0 32 14" fill="#635bff">
+                            <path d="M32 6.77c0-3.74-1.82-6.77-5.24-6.77-3.43 0-5.56 3.03-5.56 6.74 0 4.46 2.52 6.74 6.13 6.74 1.76 0 3.09-.4 4.08-.96v-2.87c-1 .52-2.14.83-3.6.83-1.43 0-2.69-.5-2.86-2.23h7.02c0-.2.03-.99.03-1.48zm-7.11-1.05c0-1.66 1.02-2.33 1.85-2.33.81 0 1.76.67 1.76 2.33h-3.61zM18.23.31c-1.39 0-2.28.65-2.77 1.1l-.18-.87h-3.1v13.13l3.53-.75.01-3.19c.5.37 1.24.88 2.45.88 2.48 0 4.73-1.99 4.73-6.82.01-4.29-2.29-6.48-4.67-6.48zm-.85 10.16c-.81 0-1.29-.29-1.62-.65l-.01-5.12c.35-.39.84-.68 1.63-.68 1.24 0 2.1 1.39 2.1 3.21 0 1.87-.84 3.24-2.1 3.24zM8.82 1.88l-3.56.76v9.7h3.56V5.61c.67-.87 1.8-.71 2.15-.59V1.73c-.36-.13-1.67-.35-2.15.15zM2.83 3.3L2.65 1.9H0v10.44h3.53V6.77c.83-1.09 2.24-.89 2.68-.73V2.71c-.46-.17-2.05-.45-2.68.59V3.3z"/>
+                        </svg>
+                        Powered by Stripe
+                    </div>
                 </div>
             </div>
         </div>
