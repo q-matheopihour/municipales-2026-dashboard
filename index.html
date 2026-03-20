@@ -675,7 +675,16 @@
             const timeEstimate = document.getElementById('time-estimate');
             const timeRemaining = document.getElementById('time-remaining');
             
-            if (!progressBar || !progressStartTime) return;
+            if (!progressBar || !progressStartTime) {
+                // Si pas encore démarré, afficher 0%
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                    progressText.textContent = '0%';
+                    progressStatus.textContent = 'Initialisation...';
+                    timeEstimate.style.display = 'none';
+                }
+                return;
+            }
             
             // Temps écoulé TOTAL depuis le début
             const totalElapsed = (Date.now() - progressStartTime) / 1000;
