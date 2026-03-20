@@ -18,282 +18,6 @@
             padding: 20px;
         }
         
-        /* ============================================
-           PAYWALL OVERLAY
-        ============================================ */
-        #paywall {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 10000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-            padding: 20px;
-        }
-        
-        #paywall.show {
-            display: flex;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .paywall-container {
-            background: transparent;
-            border-radius: 0;
-            max-width: 1200px;
-            width: 90%;
-            padding: 0;
-            box-shadow: none;
-            display: flex;
-            gap: 60px;
-            align-items: center;
-        }
-        
-        .paywall-left {
-            flex: 1;
-            color: white;
-        }
-        
-        .paywall-message {
-            font-size: 56px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-        
-        .paywall-right {
-            width: 500px;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        .paywall-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .paywall-logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-        
-        .paywall-subtitle {
-            color: #718096;
-            font-size: 14px;
-        }
-        
-        .billing-toggle {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            background: #f7fafc;
-            padding: 4px;
-            border-radius: 8px;
-        }
-        
-        .billing-option {
-            flex: 1;
-            padding: 12px;
-            border-radius: 6px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        
-        .billing-option.active {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .price-display {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .price-amount {
-            font-size: 48px;
-            font-weight: 800;
-            color: #1a202c;
-        }
-        
-        .price-period {
-            color: #718096;
-            font-size: 16px;
-        }
-        
-        .price-savings {
-            color: #48bb78;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border 0.2s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .card-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 12px;
-        }
-        
-        .promo-applied {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .promo-applied.show {
-            display: block;
-        }
-        
-        .btn-pay {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .btn-pay:hover {
-            transform: translateY(-2px);
-        }
-        
-        .btn-pay:active {
-            transform: translateY(0);
-        }
-        
-        .btn-apply-promo {
-            padding: 12px 20px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.2s;
-        }
-        
-        .btn-apply-promo:hover {
-            background: #5568d3;
-        }
-        
-        .paywall-footer {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 12px;
-            color: #a0aec0;
-        }
-        
-        .stripe-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 16px;
-            color: #a0aec0;
-            font-size: 12px;
-        }
-        
-        /* ============================================
-           RICKROLL OVERLAY
-        ============================================ */
-        #rickroll {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        #rickroll.show {
-            display: flex;
-        }
-        
-        #rickroll iframe {
-            width: 80%;
-            height: 80%;
-            border: none;
-        }
-        
-        .rickroll-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        
-        .rickroll-close:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        /* ============================================
-           DASHBOARD (identique à v2)
-        ============================================ */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -305,12 +29,9 @@
             border-radius: 16px;
             margin-bottom: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         
-        .header-left h1 {
+        .header h1 {
             font-size: 32px;
             color: #1a202c;
             margin-bottom: 10px;
@@ -322,26 +43,6 @@
         .header .meta {
             color: #718096;
             font-size: 14px;
-        }
-        
-        .btn-rickroll {
-            padding: 10px 20px;
-            background: #cbd5e0;
-            color: #4a5568;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        
-        .btn-rickroll:hover {
-            background: #a0aec0;
-            color: #2d3748;
         }
         
         /* SUPERVISION CARD (en haut) */
@@ -384,7 +85,7 @@
         .status-badge.updating {
             background: #fef3c7;
             color: #92400e;
-            animation: pulseStatus 2s ease-in-out infinite;
+            animation: pulse 2s ease-in-out infinite;
         }
         
         .status-badge.ready {
@@ -392,16 +93,52 @@
             color: #065f46;
         }
         
-        @keyframes pulseStatus {
+        @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.6; }
         }
         
-        /* Reste du CSS dashboard v2... */
+        .warning-message {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #92400e;
+        }
+        
+        .warning-message strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .search-bar input:focus {
+            border-color: #667eea;
+        }
+        
         .communes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 24px;
         }
         
         .commune-card {
@@ -409,16 +146,16 @@
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .commune-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
         
         .commune-card h2 {
-            font-size: 24px;
+            font-size: 22px;
             color: #1a202c;
             margin-bottom: 16px;
             display: flex;
@@ -435,24 +172,22 @@
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         
-        .status-dot.d-ok, .status-dot.g-ok, .status-dot.d-maj, .status-dot.g-maj {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-dot.att {
-            background: #fee2e2;
-            color: #991b1b;
-        }
+        .status-dot.d-ok { background: #fef3c7; color: #92400e; }
+        .status-dot.g-ok { background: #fef3c7; color: #92400e; }
+        .status-dot.d-maj { background: #d1fae5; color: #065f46; }
+        .status-dot.g-maj { background: #d1fae5; color: #065f46; }
+        .status-dot.d-err { background: #fee2e2; color: #991b1b; }
+        .status-dot.g-err { background: #fee2e2; color: #991b1b; }
+        .status-dot.att { background: #e5e7eb; color: #4b5563; }
         
         .stats-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 12px;
             margin-bottom: 20px;
         }
         
@@ -465,23 +200,21 @@
         .stat-item label {
             display: block;
             font-size: 11px;
+            color: #718096;
             text-transform: uppercase;
-            color: #a0aec0;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
         
         .stat-item value {
             display: block;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #1a202c;
         }
         
         .listes-preview {
-            border-top: 2px solid #edf2f7;
-            padding-top: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         
         .liste-item {
@@ -567,6 +300,8 @@
         
         .btn-primary:hover {
             background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
         
         .btn-secondary {
@@ -576,70 +311,79 @@
         
         .btn-secondary:hover {
             background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
         }
         
         .btn-tertiary {
-            background: #9333ea;
-            color: white;
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
         }
         
         .btn-tertiary:hover {
-            background: #7e22ce;
+            background: #edf2f7;
+            border-color: #cbd5e0;
         }
         
-        .btn-tertiary:disabled {
-            background: #e2e8f0;
-            color: #a0aec0;
-            cursor: not-allowed;
+        .error-state {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
         }
         
-        /* Modal */
-        .modal {
-            display: none;
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Modale de mise à jour */
+        .update-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal.show {
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
         }
         
         .modal-content {
             background: white;
-            padding: 32px;
+            padding: 40px;
             border-radius: 16px;
             max-width: 500px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
         }
         
-        .modal h2 {
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-        
-        .modal p {
-            color: #4a5568;
-            margin-bottom: 24px;
-        }
-        
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        /* Responsive */
-        @keyframes slideInUp {
+        @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -647,281 +391,344 @@
             }
         }
         
+        .modal-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff9500;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+        
+        .modal-content h2 {
+            color: #ff9500;
+            margin: 0 0 16px 0;
+            font-size: 24px;
+        }
+        
+        .modal-content p {
+            color: #333;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        
+        .modal-small {
+            font-size: 14px !important;
+            color: #666 !important;
+            margin-top: 20px !important;
+        }
+        
+        /* Barre de progression */
+        .progress-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 24px 0 16px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        .progress-status {
+            font-size: 15px;
+            color: #4a5568;
+            font-weight: 500;
+            margin: 12px 0;
+        }
+        
+        .time-estimate {
+            font-size: 14px;
+            color: #718096;
+            margin: 8px 0;
+        }
+        
+        .time-estimate strong {
+            color: #667eea;
+        }
+        
+        .sagouin-button {
+            margin-top: 24px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .sagouin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .sagouin-button:active {
+            transform: translateY(0);
+        }
+        
         @media (max-width: 768px) {
             .communes-grid {
                 grid-template-columns: 1fr;
             }
             
-            .header {
-                flex-direction: column;
-                gap: 16px;
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 20px;
+                padding: 30px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- PAYWALL OVERLAY -->
-    <div id="paywall">
-        <div class="paywall-container">
-            <div class="paywall-left">
-                <div class="paywall-message">
-                    Tout travail mérite<br>un salaire.<br>Le nôtre chiffre<br>pas mal.
-                </div>
-            </div>
-            
-            <div class="paywall-right">
-                <div class="paywall-header">
-                    <div class="paywall-logo">MuniData</div>
-                    <div class="paywall-subtitle">Accès illimité aux résultats en temps réel</div>
-                </div>
-                
-                <div class="billing-toggle">
-                    <button class="billing-option active" id="monthly-btn" onclick="switchBilling('monthly')">
-                        Mensuel
-                    </button>
-                    <button class="billing-option" id="yearly-btn" onclick="switchBilling('yearly')">
-                        Annuel
-                    </button>
-                </div>
-                
-                <div class="price-display">
-                    <div class="price-amount" id="price-amount">18,99€</div>
-                    <div class="price-period" id="price-period">par mois</div>
-                    <div class="price-savings" id="price-savings" style="display: none;">
-                        💰 Économisez 12€ par an
-                    </div>
-                </div>
-                
-                <div class="promo-applied" id="promo-applied">
-                    🎉 Code promo appliqué ! Abonnement gratuit
-                </div>
-                
-                <form id="payment-form" onsubmit="handlePayment(event)">
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" placeholder="pierre@esj-lille.fr" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Numéro de carte</label>
-                        <input type="text" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" required>
-                    </div>
-                    
-                    <div class="card-row">
-                        <div class="form-group">
-                            <label class="form-label">Expiration</label>
-                            <input type="text" class="form-input" placeholder="MM / AA" maxlength="7" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">CVV</label>
-                            <input type="text" class="form-input" placeholder="123" maxlength="3" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Code promo (optionnel)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="text" class="form-input" id="promo-input" placeholder="" style="flex: 1;">
-                            <button type="button" class="btn-apply-promo" onclick="applyPromo()">Appliquer</button>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-pay" id="pay-btn">
-                        💳 Payer <span id="final-price">18,99€</span>
-                    </button>
-                </form>
-                
-                <div class="paywall-footer">
-                    Paiement sécurisé · Annulez à tout moment
-                    <div class="stripe-badge">
-                        <svg width="32" height="14" viewBox="0 0 32 14" fill="#635bff">
-                            <path d="M32 6.77c0-3.74-1.82-6.77-5.24-6.77-3.43 0-5.56 3.03-5.56 6.74 0 4.46 2.52 6.74 6.13 6.74 1.76 0 3.09-.4 4.08-.96v-2.87c-1 .52-2.14.83-3.6.83-1.43 0-2.69-.5-2.86-2.23h7.02c0-.2.03-.99.03-1.48zm-7.11-1.05c0-1.66 1.02-2.33 1.85-2.33.81 0 1.76.67 1.76 2.33h-3.61zM18.23.31c-1.39 0-2.28.65-2.77 1.1l-.18-.87h-3.1v13.13l3.53-.75.01-3.19c.5.37 1.24.88 2.45.88 2.48 0 4.73-1.99 4.73-6.82.01-4.29-2.29-6.48-4.67-6.48zm-.85 10.16c-.81 0-1.29-.29-1.62-.65l-.01-5.12c.35-.39.84-.68 1.63-.68 1.24 0 2.1 1.39 2.1 3.21 0 1.87-.84 3.24-2.1 3.24zM8.82 1.88l-3.56.76v9.7h3.56V5.61c.67-.87 1.8-.71 2.15-.59V1.73c-.36-.13-1.67-.35-2.15.15zM2.83 3.3L2.65 1.9H0v10.44h3.53V6.77c.83-1.09 2.24-.89 2.68-.73V2.71c-.46-.17-2.05-.45-2.68.59V3.3z"/>
-                        </svg>
-                        Powered by Stripe
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RICKROLL OVERLAY -->
-    <div id="rickroll">
-        <button class="rickroll-close" onclick="closeRickroll()">✕ Fermer</button>
-        <iframe id="rickroll-video" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
-
-    <!-- DASHBOARD NORMAL -->
     <div class="container">
+        <!-- En-tête -->
         <div class="header">
-            <div class="header-left">
-                <h1>🗳️ Municipales 2026 — Résultats en direct</h1>
-                <div class="meta">Second tour · Mise à jour toutes les 10 secondes</div>
+            <h1>
+                🗳️ Municipales 2026 — Résultats en direct
+            </h1>
+            <div class="meta">
+                Dernière mise à jour : <span id="last-update-time">Chargement...</span>
             </div>
-            <button class="btn-rickroll" onclick="triggerRickroll()">
-                🔄 Rafraîchir ASAP
-            </button>
         </div>
 
-        <div class="supervision-card">
+        <!-- SUPERVISION CARD EN HAUT -->
+        <div class="supervision-card" id="supervision-card">
             <div class="supervision-header">
-                <h2>📊 Vue d'ensemble</h2>
-                <div class="last-update">
-                    <span id="supervision-timestamp">—</span>
-                    <span class="status-badge ready" id="status-badge">● DONNÉES À JOUR</span>
-                </div>
+                <h2>📊 État de la supervision</h2>
+                <span class="status-badge ready" id="status-badge">
+                    ● EN DIRECT
+                </span>
+            </div>
+            <div class="last-update">
+                <strong>Dernière synchronisation :</strong>
+                <span id="supervision-timestamp">—</span>
+            </div>
+            <div class="warning-message" id="warning-message" style="display: none;">
+                <strong>⚠️ Mise à jour en cours</strong>
+                Les données sont en cours de rafraîchissement. Ne copiez/téléchargez pas les graphiques pour le moment.
             </div>
         </div>
 
-        <div id="content">
-            <p style="text-align: center; color: white; padding: 40px;">Chargement...</p>
+        <!-- Barre de recherche -->
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="🔍 Rechercher une commune...">
         </div>
-    </div>
 
-    <!-- MODAL MAJ -->
-    <div class="modal" id="update-modal">
-        <div class="modal-content">
-            <h2>🔄 Mise à jour en cours</h2>
-            <p>De nouvelles données sont en cours d'intégration. Les graphiques vont se mettre à jour automatiquement.</p>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">OK, compris</button>
-                <button class="btn btn-primary" onclick="closeSagouin()" style="flex: 1;">Ne plus afficher</button>
+        <!-- Zone de contenu -->
+        <div id="content">
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                Chargement des données...
             </div>
         </div>
     </div>
 
     <script>
+        // ⚙️ CONFIGURATION — URL de l'API Google Apps Script
         const API_URL = 'https://script.google.com/macros/s/AKfycbzbaat2Wv42TtnimI7hGB6nZeLleNhuAa58I8mxHj412yjHhdsjApmzvdRqbSKIOM0MPA/exec';
+        
         let allData = null;
-        let sagouinClicked = false;
-        let currentBilling = 'monthly';
+        let refreshInterval = null;
+        let lastSupervisionTime = null;
+        let sagouinClicked = false; // Flag pour ne pas réafficher la modale après clic sagouin
         
-        // Vérifier si on doit afficher le paywall
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('paywall') === 'true') {
-            document.getElementById('paywall').classList.add('show');
-        }
-        
-        // Billing toggle
-        function switchBilling(type) {
-            currentBilling = type;
-            const monthlyBtn = document.getElementById('monthly-btn');
-            const yearlyBtn = document.getElementById('yearly-btn');
-            const priceAmount = document.getElementById('price-amount');
-            const pricePeriod = document.getElementById('price-period');
-            const priceSavings = document.getElementById('price-savings');
-            const finalPrice = document.getElementById('final-price');
-            
-            if (type === 'monthly') {
-                monthlyBtn.classList.add('active');
-                yearlyBtn.classList.remove('active');
-                priceAmount.textContent = '18,99€';
-                pricePeriod.textContent = 'par mois';
-                priceSavings.style.display = 'none';
-                if (!document.getElementById('promo-applied').classList.contains('show')) {
-                    finalPrice.textContent = '18,99€';
-                }
-            } else {
-                monthlyBtn.classList.remove('active');
-                yearlyBtn.classList.add('active');
-                priceAmount.textContent = '17,99€';
-                pricePeriod.textContent = 'par mois (facturé 215,88€/an)';
-                priceSavings.style.display = 'block';
-                if (!document.getElementById('promo-applied').classList.contains('show')) {
-                    finalPrice.textContent = '215,88€';
-                }
-            }
-        }
-        
-        // Apply promo code
-        function applyPromo() {
-            const promoInput = document.getElementById('promo-input');
-            const promoApplied = document.getElementById('promo-applied');
-            const priceAmount = document.getElementById('price-amount');
-            const pricePeriod = document.getElementById('price-period');
-            const payBtn = document.getElementById('pay-btn');
-            
-            if (promoInput.value.toUpperCase() === 'FOXY') {
-                // Afficher le badge
-                promoApplied.classList.add('show');
-                
-                // Changer le prix affiché en haut
-                priceAmount.textContent = '0€';
-                pricePeriod.textContent = 'gratuit';
-                
-                // Changer le bouton
-                payBtn.innerHTML = '🎉 C\'est parti !';
-            } else if (promoInput.value !== '') {
-                // Code invalide
-                alert('❌ Code promo invalide');
-            }
-        }
-        
-        // Handle payment
-        function handlePayment(event) {
-            event.preventDefault();
-            document.getElementById('paywall').classList.remove('show');
-        }
-        
-        // Rickroll
-        function triggerRickroll() {
-            const rickroll = document.getElementById('rickroll');
-            const video = document.getElementById('rickroll-video');
-            video.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0';
-            rickroll.classList.add('show');
-        }
-        
-        function closeRickroll() {
-            const rickroll = document.getElementById('rickroll');
-            const video = document.getElementById('rickroll-video');
-            video.src = '';
-            rickroll.classList.remove('show');
-        }
-        
-        // Dashboard functions (copié de v2)
-        async function fetchData() {
+        // Charger les données
+        async function loadData() {
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
                 allData = data;
+                lastSupervisionTime = data.timestamp_formatted;
                 
+                // Détecter si mise à jour en cours
                 const isUpdating = detectIfUpdating(data.supervision);
                 updateSupervisionCard(data.timestamp_formatted, isUpdating);
+                
+                // Afficher les communes
                 displayCommunes(data);
+                
+                // Mettre à jour le timestamp global
+                document.getElementById('last-update-time').textContent = data.timestamp_formatted;
                 
             } catch (error) {
                 console.error('Erreur:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error-state">
+                        <h3>❌ Erreur de chargement</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
             }
         }
         
+        // Détecter si une mise à jour est en cours
         function detectIfUpdating(supervision) {
             if (!supervision || supervision.length === 0) return false;
-            return supervision.some(c => c.statut_donnees === 'ATT' || c.statut_graphique === 'ATT');
+            
+            // Si au moins une commune est en ATT, c'est qu'une mise à jour est en cours
+            return supervision.some(c => 
+                c.statut_donnees === 'ATT' || c.statut_graphique === 'ATT'
+            );
         }
         
+        // Mettre à jour la carte de supervision
         function updateSupervisionCard(timestamp, isUpdating) {
             document.getElementById('supervision-timestamp').textContent = timestamp || '—';
+            
             const badge = document.getElementById('status-badge');
+            const warning = document.getElementById('warning-message');
             const modal = document.getElementById('update-modal');
             
             if (isUpdating) {
                 badge.className = 'status-badge updating';
                 badge.textContent = '⚠️ MISE À JOUR EN COURS';
+                warning.style.display = 'block';
+                // N'afficher la modale QUE si l'utilisateur n'a pas cliqué sur sagouin
                 if (!sagouinClicked) {
-                    modal.classList.add('show');
+                    modal.style.display = 'flex';
+                    startProgressSimulation();
                 }
             } else {
                 badge.className = 'status-badge ready';
                 badge.textContent = '● DONNÉES À JOUR';
-                modal.classList.remove('show');
+                warning.style.display = 'none';
+                modal.style.display = 'none';
+                // Réinitialiser le flag quand la MAJ est terminée
                 sagouinClicked = false;
+                stopProgressSimulation();
             }
         }
         
+        // Variables pour la simulation de progression
+        let progressInterval = null;
+        let progressPhase = 0;
+        let progressValue = 0;
+        let startTime = null;
+        
+        // Phases de progression (estimation basée sur ~4-5 min total)
+        const progressPhases = [
+            { name: 'Scraping des résultats...', duration: 20, max: 25 },      // 20s → 25%
+            { name: 'Écriture Google Sheets...', duration: 180, max: 50 },    // 3min → 50%
+            { name: 'Génération graphiques Datawrapper...', duration: 80, max: 95 } // 1min20 → 95%
+        ];
+        
+        function startProgressSimulation() {
+            stopProgressSimulation(); // Reset si déjà en cours
+            
+            progressPhase = 0;
+            progressValue = 0;
+            startTime = Date.now();
+            
+            updateProgress();
+            
+            progressInterval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                const currentPhase = progressPhases[progressPhase];
+                
+                if (!currentPhase) {
+                    // Toutes les phases terminées, on reste à 95% en attente
+                    progressValue = 95;
+                    updateProgress();
+                    return;
+                }
+                
+                // Calculer la progression dans la phase actuelle
+                const phaseProgress = Math.min(elapsed / currentPhase.duration, 1);
+                const previousMax = progressPhase > 0 ? progressPhases[progressPhase - 1].max : 0;
+                progressValue = previousMax + (currentPhase.max - previousMax) * phaseProgress;
+                
+                updateProgress();
+                
+                // Passer à la phase suivante si terminée
+                if (phaseProgress >= 1) {
+                    progressPhase++;
+                    startTime = Date.now();
+                }
+            }, 500); // MAJ toutes les 500ms
+        }
+        
+        function stopProgressSimulation() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            // Mettre à 100% quand terminé
+            progressValue = 100;
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressStatus = document.getElementById('progress-status');
+            const timeEstimate = document.getElementById('time-estimate');
+            const timeRemaining = document.getElementById('time-remaining');
+            
+            if (!progressBar) return;
+            
+            progressBar.style.width = progressValue + '%';
+            progressText.textContent = Math.round(progressValue) + '%';
+            
+            // Afficher la phase actuelle
+            const currentPhase = progressPhases[progressPhase];
+            if (currentPhase) {
+                progressStatus.textContent = currentPhase.name;
+                
+                // Estimation du temps restant
+                const totalDuration = progressPhases.reduce((sum, p) => sum + p.duration, 0);
+                const elapsed = (Date.now() - startTime) / 1000;
+                const phasesCompleted = progressPhases.slice(0, progressPhase).reduce((sum, p) => sum + p.duration, 0);
+                const estimatedRemaining = Math.max(0, totalDuration - phasesCompleted - elapsed);
+                
+                if (estimatedRemaining > 0) {
+                    const minutes = Math.floor(estimatedRemaining / 60);
+                    const seconds = Math.floor(estimatedRemaining % 60);
+                    timeRemaining.textContent = minutes > 0 
+                        ? `${minutes} min ${seconds} s`
+                        : `${seconds} s`;
+                    timeEstimate.style.display = 'block';
+                } else {
+                    timeEstimate.style.display = 'none';
+                }
+            } else {
+                progressStatus.textContent = 'Finalisation...';
+                timeEstimate.style.display = 'none';
+            }
+        }
+        
+        // Afficher les communes
         function displayCommunes(data) {
             const communes = data.supervision || [];
             const communesData = data.communes || {};
             
+            // Mapping des noms de communes pour l'affichage correct
             const communeNames = {
                 'villeneuve_d_ascq_t2': 'Villeneuve-d\'Ascq',
                 'courcelles_lès_lens_t2': 'Courcelles-lès-Lens',
@@ -932,17 +739,30 @@
             
             communes.forEach(commune => {
                 const sheetName = commune.onglet_commune;
-                if (sheetName === 'SUPERVISION' || !sheetName || !sheetName.includes('_t2')) return;
+                
+                // FILTRER : Ignorer l'onglet SUPERVISION lui-même
+                if (sheetName === 'SUPERVISION' || !sheetName || !sheetName.includes('_t2')) {
+                    return;
+                }
                 
                 let listes = communesData[sheetName] || [];
+                
+                // Trier les listes par pourcentage décroissant
                 listes = listes.sort((a, b) => (b['resultat_%'] || 0) - (a['resultat_%'] || 0));
                 
+                // Nom lisible : utiliser le mapping si disponible, sinon génération auto
                 const nomCommune = communeNames[sheetName] || 
                     sheetName.replace(/_t2$/, '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 
+                // Statuts
                 const statutData = (commune.statut_donnees || 'ATT').toLowerCase().replace('-', '-');
                 const statutGraph = (commune.statut_graphique || 'ATT').toLowerCase().replace('-', '-');
+                
+                // Chart ID depuis le lien DW
                 const chartId = extractChartId(commune.lien_graphique_dw);
+                
+                // Lien PNG direct depuis Google Drive
+                const pngUrl = commune.lien_png_drive || null;
                 
                 html += `
                     <div class="commune-card">
@@ -995,7 +815,7 @@
                                 <button onclick="copyEmbed('${sheetName}')" class="btn btn-secondary" title="Copier le code embed HTML">
                                     📋 Copier embed
                                 </button>
-                                <a href="https://app.datawrapper.de/chart/${chartId}/visualize" target="_blank" class="btn btn-tertiary" title="Ouvrir dans Datawrapper" style="text-decoration: none;">
+                                <a href="https://app.datawrapper.de/chart/${chartId}/visualize" target="_blank" class="btn btn-tertiary" title="Ouvrir dans Datawrapper (permet téléchargement PNG)" style="background: #9333ea; color: white; border: none; text-decoration: none;">
                                     📱 Export PNG
                                 </a>
                             ` : `
@@ -1012,38 +832,87 @@
             document.getElementById('content').innerHTML = html;
         }
         
+        // Extraire l'ID du chart depuis l'URL Datawrapper
         function extractChartId(url) {
             if (!url) return null;
             const match = url.match(/chart\/([^\/]+)/);
             return match ? match[1] : null;
         }
         
+        // Copier le lien du graphique
         function copyLink(chartId, communeName) {
             const url = `https://datawrapper.dwcdn.net/${chartId}`;
-            navigator.clipboard.writeText(url);
-            alert(`✓ Lien copié pour ${communeName} !`);
+            
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Lien copié !');
+            }).catch(err => {
+                // Fallback : afficher le lien
+                prompt('Copiez ce lien :', url);
+            });
         }
         
+        // Copier le code embed
         function copyEmbed(sheetName) {
+            if (!allData || !allData.supervision) return;
+            
             const commune = allData.supervision.find(c => c.onglet_commune === sheetName);
-            if (commune && commune.code_embed_dw) {
-                navigator.clipboard.writeText(commune.code_embed_dw);
-                alert('✓ Code embed copié !');
+            if (!commune || !commune.code_embed_dw) {
+                alert('Code embed non disponible');
+                return;
             }
+            
+            navigator.clipboard.writeText(commune.code_embed_dw).then(() => {
+                alert('✅ Code embed copié !');
+            }).catch(err => {
+                alert('❌ Erreur de copie : ' + err);
+            });
         }
         
-        function closeModal() {
-            document.getElementById('update-modal').classList.remove('show');
-        }
+        // Recherche
+        document.getElementById('search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.commune-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('h2 span').textContent.toLowerCase();
+                card.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        });
         
-        function closeSagouin() {
-            sagouinClicked = true;
-            closeModal();
-        }
+        // Chargement initial
+        loadData();
         
-        // Initial fetch
-        fetchData();
-        setInterval(fetchData, 10000);
+        // Rafraîchissement automatique toutes les 10 secondes
+        refreshInterval = setInterval(loadData, 10000);
     </script>
+
+    <!-- Modale de mise à jour avec progression -->
+    <div id="update-modal" class="update-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-spinner"></div>
+            <h2>⚠️ Mise à jour en cours</h2>
+            
+            <!-- Barre de progression -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            
+            <!-- Statut détaillé -->
+            <div class="progress-status" id="progress-status">Initialisation...</div>
+            
+            <!-- Estimation temps restant -->
+            <div class="time-estimate" id="time-estimate" style="display: none;">
+                Temps restant estimé : <strong id="time-remaining">—</strong>
+            </div>
+            
+            <p style="margin-top: 20px;"><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
+            <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
+            <button onclick="sagouinClicked = true; document.getElementById('update-modal').style.display='none'" class="sagouin-button">
+                😈 J'y vais quand même, je suis un sagouin
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>
