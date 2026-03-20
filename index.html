@@ -634,7 +634,7 @@
         const progressPhases = [
             { name: 'Scraping des résultats...', duration: 47, max: 13 },       // 47s → 13%
             { name: 'Écriture Google Sheets...', duration: 218, max: 75 },      // 218s → 75%
-            { name: 'Génération graphiques Datawrapper...', duration: 84, max: 98 } // 84s → 98%
+            { name: 'Génération graphiques Datawrapper...', duration: 84, max: 100 } // 84s → 100%
         ];
         
         function startProgressSimulation() {
@@ -703,10 +703,10 @@
                 cumulativeDuration += phase.duration;
             }
             
-            // Si on a dépassé toutes les phases, rester à 95%
+            // Si on a dépassé toutes les phases, rester à 100%
             if (totalElapsed >= cumulativeDuration) {
-                progressValue = 95;
-                currentPhase = { name: 'Finalisation...' };
+                progressValue = 100;
+                currentPhase = progressPhases[progressPhases.length - 1];
             }
             
             // Mettre à jour l'affichage
@@ -718,7 +718,7 @@
             const totalDuration = progressPhases.reduce((sum, p) => sum + p.duration, 0);
             const estimatedRemaining = Math.max(0, totalDuration - totalElapsed);
             
-            if (estimatedRemaining > 0 && progressValue < 95) {
+            if (estimatedRemaining > 0 && progressValue < 100) {
                 const minutes = Math.floor(estimatedRemaining / 60);
                 const seconds = Math.floor(estimatedRemaining % 60);
                 timeRemaining.textContent = minutes > 0 
@@ -916,7 +916,7 @@
             <p style="margin-top: 20px;"><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
             <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
             <button onclick="sagouinClicked = true; document.getElementById('update-modal').style.display='none'" class="sagouin-button">
-                😈 J'y vais quand même, je suis un sagouin
+                J'adore le risque
             </button>
         </div>
     </div>
