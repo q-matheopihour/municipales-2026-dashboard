@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuniMarket 2026 🗳️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .balance {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+        }
+        
+        .back-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            color: #374151;
+        }
+        
+        .back-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .markets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 16px;
+        }
+        
+        .market-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .market-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Carte spéciale Damien */
+        .market-card.damien-special {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .market-card.damien-special .market-title,
+        .market-card.damien-special .outcome-name,
+        .market-card.damien-special .outcome-price,
+        .market-card.damien-special .volume {
+            color: white;
+        }
+        
+        .market-card.damien-special .vote-btn.yes {
+            background: rgba(255, 255, 255, 0.9);
+            color: #10b981;
+        }
+        
+        .market-card.damien-special .vote-btn.no {
+            background: rgba(255, 255, 255, 0.9);
+            color: #dc2626;
+        }
+        
+        .market-header {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .market-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #6b7280;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .market-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .market-title {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1.3;
+        }
+        
+        .outcomes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .outcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .outcome-name {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .outcome-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .vote-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .vote-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .vote-btn.yes {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .vote-btn.yes:hover {
+            background: #a7f3d0;
+        }
+        
+        .vote-btn.no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .vote-btn.no:hover {
+            background: #fecaca;
+        }
+        
+        .market-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .volume {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #dc2626;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .close-btn {
+            background: #f3f4f6;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #6b7280;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .trade-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .trade-btn:hover {
+            transform: scale(1.02);
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🗳️ MuniMarket 2026</div>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="balance">Solde: <span id="balance">10 000€</span></div>
+                <a href="dashboard_v2.html" class="back-btn">← Retour</a>
+            </div>
+        </div>
+        
+        <div class="markets-grid" id="markets"></div>
+    </div>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Acheter</div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Marché</div>
+                <div class="form-value" id="trade-market">-</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Candidat</div>
+                <div class="form-value" id="trade-candidate">-</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Prix</div>
+                <div class="form-value" id="trade-price">-</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Nombre de shares</div>
+                <input type="number" class="form-input" id="shares" value="10" min="1">
+            </div>
+            <div class="form-group">
+                <div class="form-label">Total</div>
+                <div class="form-value" id="trade-total">-</div>
+            </div>
+            <button class="trade-btn" onclick="executeTrade()">Acheter</button>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        const markets = [
+            {commune: 'Paris', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=100&h=100&fit=crop', candidates: [{name: 'Rachida Dati', nuance: 'LR', price: 0.52}, {name: 'Rémi Féraud', nuance: 'SOC', price: 0.48}]},
+            {commune: 'Lyon', img: 'https://images.unsplash.com/photo-1524305904866-ee718a0f390c?w=100&h=100&fit=crop', candidates: [{name: 'Grégory Doucet', nuance: 'ECO', price: 0.63}, {name: 'François-Noël Buffet', nuance: 'LR', price: 0.37}]},
+            {commune: 'Marseille', img: 'https://images.unsplash.com/photo-1598029029218-a86f20f82de0?w=100&h=100&fit=crop', candidates: [{name: 'Benoît Payan', nuance: 'SOC', price: 0.45}, {name: 'Lionel Royer-Perreaut', nuance: 'RN', price: 0.55}]},
+            {commune: 'Toulouse', img: 'https://images.unsplash.com/photo-1560174038-1e4c49c57a97?w=100&h=100&fit=crop', candidates: [{name: 'Jean-Luc Moudenc', nuance: 'LR', price: 0.54}, {name: 'Nadia Pellefigue', nuance: 'SOC', price: 0.46}]},
+            {commune: 'Nice', img: 'https://images.unsplash.com/photo-1566417842800-e03d2df8b06c?w=100&h=100&fit=crop', candidates: [{name: 'Christian Estrosi', nuance: 'LR', price: 0.71}, {name: 'Philippe Vardon', nuance: 'RN', price: 0.29}]},
+            {commune: 'Nantes', img: 'https://images.unsplash.com/photo-1642168489454-87cb2d8c07f7?w=100&h=100&fit=crop', candidates: [{name: 'Johanna Rolland', nuance: 'SOC', price: 0.59}, {name: 'Laurence Garnier', nuance: 'LR', price: 0.41}]},
+            {commune: 'Strasbourg', img: 'https://images.unsplash.com/photo-1516736467291-e05c155548e7?w=100&h=100&fit=crop', candidates: [{name: 'Jeanne Barseghian', nuance: 'ECO', price: 0.49}, {name: 'Alain Fontanel', nuance: 'ENS', price: 0.51}]},
+            {commune: 'Montpellier', img: 'https://images.unsplash.com/photo-1627907095477-dbbca1b5910c?w=100&h=100&fit=crop', candidates: [{name: 'Michaël Delafosse', nuance: 'SOC', price: 0.61}, {name: 'Jean Arcelin', nuance: 'LR', price: 0.39}]},
+            {commune: 'Bordeaux', img: 'https://images.unsplash.com/photo-1506713747532-92cc54d30e34?w=100&h=100&fit=crop', candidates: [{name: 'Pierre Hurmic', nuance: 'ECO', price: 0.53}, {name: 'Nicolas Florian', nuance: 'LR', price: 0.47}]},
+            {commune: 'Lille', img: 'https://images.unsplash.com/photo-1600020792843-574ab0c2b55d?w=100&h=100&fit=crop', candidates: [{name: 'Martine Aubry', nuance: 'SOC', price: 0.57}, {name: 'Violette Spillebout', nuance: 'ENS', price: 0.43}]},
+            {commune: 'Rennes', img: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=100&h=100&fit=crop', candidates: [{name: 'Nathalie Appéré', nuance: 'SOC', price: 0.64}, {name: 'Matthieu Theurier', nuance: 'LR', price: 0.36}]},
+            {commune: 'Roubaix', img: 'https://images.unsplash.com/photo-1523978591478-c753949ff840?w=100&h=100&fit=crop', candidates: [{name: 'Guillaume Delbar', nuance: 'DVD', price: 0.51}, {name: 'Anne Voituriez', nuance: 'ECO', price: 0.49}]},
+            {commune: 'Tourcoing', img: 'https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=100&h=100&fit=crop', candidates: [{name: 'Gérald Darmanin', nuance: 'ENS', price: 0.69}, {name: 'Doriane Becue', nuance: 'FI', price: 0.31}]},
+            {commune: 'Valenciennes', img: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=100&h=100&fit=crop', candidates: [{name: 'Laurent Degallaix', nuance: 'DVD', price: 0.55}, {name: 'Anne-Lise Dufour-Tonini', nuance: 'DVG', price: 0.45}]},
+            {commune: 'Douai', img: 'https://images.unsplash.com/photo-1567696153798-06e2cdea2c58?w=100&h=100&fit=crop', candidates: [{name: 'Frédéric Chéreau', nuance: 'DVG', price: 0.48}, {name: 'Christian Poiret', nuance: 'DVD', price: 0.52}]},
+            {commune: 'Cambrai', img: 'https://images.unsplash.com/photo-1586682943191-8ec3a39085d7?w=100&h=100&fit=crop', candidates: [{name: 'François-Xavier Villain', nuance: 'DVD', price: 0.54}, {name: 'Nadège Lefebvre', nuance: 'DVG', price: 0.46}]},
+            {commune: 'Wattrelos', img: 'https://images.unsplash.com/photo-1519832979-6fa011b87667?w=100&h=100&fit=crop', candidates: [{name: 'Dominique Baert', nuance: 'SOC', price: 0.61}, {name: 'Sébastien Leprêtre', nuance: 'LR', price: 0.39}]},
+            {commune: 'Liévin', img: 'https://images.unsplash.com/photo-1581608205582-93ba81ad3f36?w=100&h=100&fit=crop', candidates: [{name: 'Sylvain Robert', nuance: 'DVG', price: 0.52}, {name: 'Marine Tondelier', nuance: 'ECO', price: 0.48}]},
+            {commune: 'Carvin', img: 'https://images.unsplash.com/photo-1599840330863-5a1e847b7caa?w=100&h=100&fit=crop', candidates: [{name: 'Jean-Jacques Cottel', nuance: 'DVG', price: 0.58}, {name: 'Ludovic Pajot', nuance: 'RN', price: 0.42}]},
+            {commune: 'Villeneuve-d\'Ascq', img: 'https://images.unsplash.com/photo-1547662168-da62f0e4a670?w=100&h=100&fit=crop', candidates: [{name: 'Gérard Caudron', nuance: 'SOC', price: 0.53}, {name: 'Marc-Antoine Leroy', nuance: 'DVD', price: 0.47}]},
+            {commune: 'Faches-Thumesnil', img: 'https://images.unsplash.com/photo-1590739225020-89b6e5ad7ca6?w=100&h=100&fit=crop', candidates: [{name: 'Patrick Proisy', nuance: 'DVD', price: 0.56}, {name: 'Michel Heurteaux', nuance: 'DVG', price: 0.44}]},
+            {commune: 'Courcelles-lès-Lens', img: 'https://images.unsplash.com/photo-1577653636874-ce8a86bc1fbc?w=100&h=100&fit=crop', candidates: [{name: 'Marie-Louise Fort', nuance: 'DVG', price: 0.49}, {name: 'Jimmy Louwette', nuance: 'RN', price: 0.51}]},
+        ];
+        
+        // Easter egg Damien en dernier
+        const damienEasterEgg = {
+            commune: '🎰 Easter Egg',
+            img: null,
+            isSpecial: true,
+            candidates: [
+                {name: 'Damien trouve', price: Math.random() * 0.4 + 0.3}, // 30-70%
+                {name: 'Damien rate', price: 0}
+            ]
+        };
+        damienEasterEgg.candidates[1].price = 1 - damienEasterEgg.candidates[0].price;
+        
+        let balance = 10000;
+        let currentTrade = null;
+        
+        function renderMarkets() {
+            const grid = document.getElementById('markets');
+            const allMarkets = [...markets, damienEasterEgg];
+            
+            grid.innerHTML = allMarkets.map(m => {
+                const volume = Math.floor(Math.random() * 50000 + 10000);
+                const isSpecial = m.isSpecial;
+                const cardClass = isSpecial ? 'market-card damien-special' : 'market-card';
+                const questionText = isSpecial ? 
+                    'Est-ce que Damien va trouver cette fonctionnalité ?' : 
+                    `Qui sera maire de ${m.commune} ?`;
+                
+                return `
+                    <div class="${cardClass}">
+                        <div class="market-header">
+                            ${m.img ? 
+                                `<div class="market-icon"><img src="${m.img}" alt="${m.commune}"></div>` :
+                                `<div class="market-icon" style="background: rgba(255,255,255,0.2); color: white; font-size: 20px;">🕵️</div>`
+                            }
+                            <div class="market-title">${questionText}</div>
+                        </div>
+                        ${m.candidates.map((c, i) => `
+                            <div class="outcome-row" style="margin-bottom: ${i < m.candidates.length - 1 ? '8px' : '16px'}">
+                                <div class="outcome-name">${c.name}</div>
+                                <div class="outcome-price">${Math.round(c.price * 100)}%</div>
+                            </div>
+                        `).join('')}
+                        <div class="vote-buttons">
+                            <button class="vote-btn yes" onclick="openTrade('${m.commune}', '${m.candidates[0].name}', ${m.candidates[0].price}, '${m.img || '🕵️'}', 'Yes')">
+                                Yes
+                            </button>
+                            <button class="vote-btn no" onclick="openTrade('${m.commune}', '${m.candidates.length > 1 ? m.candidates[1].name : 'Autre'}', ${m.candidates.length > 1 ? m.candidates[1].price : 1 - m.candidates[0].price}, '${m.img || '🕵️'}', 'No')">
+                                No
+                            </button>
+                        </div>
+                        <div class="market-footer">
+                            <div class="volume">€${volume.toLocaleString()} Vol.</div>
+                            <div class="live-badge"><span class="live-dot"></span> LIVE</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function openTrade(commune, candidate, price, img, vote) {
+            currentTrade = {commune, candidate, price, img, vote};
+            document.getElementById('trade-market').textContent = commune;
+            document.getElementById('trade-candidate').textContent = `${candidate} (${vote})`;
+            document.getElementById('trade-price').textContent = `${Math.round(price * 100)}%`;
+            updateTotal();
+            document.getElementById('modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        function updateTotal() {
+            const shares = parseInt(document.getElementById('shares').value) || 0;
+            const total = shares * currentTrade.price;
+            document.getElementById('trade-total').textContent = `${total.toFixed(2)}€`;
+        }
+        
+        document.getElementById('shares').addEventListener('input', updateTotal);
+        
+        function executeTrade() {
+            const shares = parseInt(document.getElementById('shares').value);
+            const cost = shares * currentTrade.price;
+            
+            if (cost > balance) {
+                showToast('❌ Solde insuffisant !');
+                return;
+            }
+            
+            balance -= cost;
+            document.getElementById('balance').textContent = `${Math.round(balance).toLocaleString()}€`;
+            
+            showToast(`✅ ${shares} shares achetés pour ${cost.toFixed(2)}€ !`);
+            closeModal();
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        renderMarkets();
+    </script>
+</body>
+</html>
