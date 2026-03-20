@@ -510,7 +510,7 @@
         <!-- En-tête -->
         <div class="header">
             <h1>
-                🗳️ Municipales 2026 — Résultats en direct
+                <span id="easter-egg-trigger" style="cursor: pointer;" title="🤫">🗳️</span> Municipales 2026 — Résultats en direct
             </h1>
             <div class="meta">
                 Dernière mise à jour : <span id="last-update-time">Chargement...</span>
@@ -897,6 +897,11 @@
         
         // Chargement initial
         loadData();
+        
+        // Easter egg: clic sur l'urne
+        document.getElementById('easter-egg-trigger').addEventListener('click', function() {
+            window.location.href = 'polymarket_easter_egg.html';
+        });
         
         // Rafraîchissement automatique toutes les 10 secondes
         refreshInterval = setInterval(loadData, 10000);
