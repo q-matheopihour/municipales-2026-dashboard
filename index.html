@@ -628,50 +628,25 @@
         
         // Variables pour la simulation de progression
         let progressInterval = null;
-        let progressPhase = 0;
-        let progressValue = 0;
-        let startTime = null;
+        let progressStartTime = null;
         
-        // Phases de progression (estimation basée sur ~4-5 min total)
+        // Phases de progression (durées RÉELLES mesurées)
         const progressPhases = [
-            { name: 'Scraping des résultats...', duration: 20, max: 25 },      // 20s → 25%
-            { name: 'Écriture Google Sheets...', duration: 180, max: 50 },    // 3min → 50%
-            { name: 'Génération graphiques Datawrapper...', duration: 80, max: 95 } // 1min20 → 95%
+            { name: 'Scraping des résultats...', duration: 47, max: 13 },       // 47s → 13%
+            { name: 'Écriture Google Sheets...', duration: 218, max: 75 },      // 218s → 75%
+            { name: 'Génération graphiques Datawrapper...', duration: 84, max: 98 } // 84s → 98%
         ];
         
         function startProgressSimulation() {
             stopProgressSimulation(); // Reset si déjà en cours
             
-            progressPhase = 0;
-            progressValue = 0;
-            startTime = Date.now();
-            
-            updateProgress();
+            progressStartTime = Date.now();
             
             progressInterval = setInterval(() => {
-                const elapsed = (Date.now() - startTime) / 1000;
-                const currentPhase = progressPhases[progressPhase];
-                
-                if (!currentPhase) {
-                    // Toutes les phases terminées, on reste à 95% en attente
-                    progressValue = 95;
-                    updateProgress();
-                    return;
-                }
-                
-                // Calculer la progression dans la phase actuelle
-                const phaseProgress = Math.min(elapsed / currentPhase.duration, 1);
-                const previousMax = progressPhase > 0 ? progressPhases[progressPhase - 1].max : 0;
-                progressValue = previousMax + (currentPhase.max - previousMax) * phaseProgress;
-                
                 updateProgress();
-                
-                // Passer à la phase suivante si terminée
-                if (phaseProgress >= 1) {
-                    progressPhase++;
-                    startTime = Date.now();
-                }
             }, 500); // MAJ toutes les 500ms
+            
+            updateProgress(); // Premier affichage immédiat
         }
         
         function stopProgressSimulation() {
@@ -680,8 +655,17 @@
                 progressInterval = null;
             }
             // Mettre à 100% quand terminé
-            progressValue = 100;
-            updateProgress();
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressStatus = document.getElementById('progress-status');
+            const timeEstimate = document.getElementById('time-estimate');
+            
+            if (progressBar) {
+                progressBar.style.width = '100%';
+                progressText.textContent = '100%';
+                progressStatus.textContent = 'Mise à jour terminée !';
+                timeEstimate.style.display = 'none';
+            }
         }
         
         function updateProgress() {
@@ -691,34 +675,57 @@
             const timeEstimate = document.getElementById('time-estimate');
             const timeRemaining = document.getElementById('time-remaining');
             
-            if (!progressBar) return;
+            if (!progressBar || !progressStartTime) return;
             
+            // Temps écoulé TOTAL depuis le début
+            const totalElapsed = (Date.now() - progressStartTime) / 1000;
+            
+            // Trouver dans quelle phase on est
+            let cumulativeDuration = 0;
+            let currentPhaseIndex = 0;
+            let currentPhase = progressPhases[0];
+            let progressValue = 0;
+            
+            for (let i = 0; i < progressPhases.length; i++) {
+                const phase = progressPhases[i];
+                if (totalElapsed < cumulativeDuration + phase.duration) {
+                    // On est dans cette phase
+                    currentPhaseIndex = i;
+                    currentPhase = phase;
+                    
+                    // Calculer la progression dans cette phase
+                    const elapsedInPhase = totalElapsed - cumulativeDuration;
+                    const phaseProgress = Math.min(elapsedInPhase / phase.duration, 1);
+                    const previousMax = i > 0 ? progressPhases[i - 1].max : 0;
+                    progressValue = previousMax + (phase.max - previousMax) * phaseProgress;
+                    break;
+                }
+                cumulativeDuration += phase.duration;
+            }
+            
+            // Si on a dépassé toutes les phases, rester à 95%
+            if (totalElapsed >= cumulativeDuration) {
+                progressValue = 95;
+                currentPhase = { name: 'Finalisation...' };
+            }
+            
+            // Mettre à jour l'affichage
             progressBar.style.width = progressValue + '%';
             progressText.textContent = Math.round(progressValue) + '%';
+            progressStatus.textContent = currentPhase.name;
             
-            // Afficher la phase actuelle
-            const currentPhase = progressPhases[progressPhase];
-            if (currentPhase) {
-                progressStatus.textContent = currentPhase.name;
-                
-                // Estimation du temps restant
-                const totalDuration = progressPhases.reduce((sum, p) => sum + p.duration, 0);
-                const elapsed = (Date.now() - startTime) / 1000;
-                const phasesCompleted = progressPhases.slice(0, progressPhase).reduce((sum, p) => sum + p.duration, 0);
-                const estimatedRemaining = Math.max(0, totalDuration - phasesCompleted - elapsed);
-                
-                if (estimatedRemaining > 0) {
-                    const minutes = Math.floor(estimatedRemaining / 60);
-                    const seconds = Math.floor(estimatedRemaining % 60);
-                    timeRemaining.textContent = minutes > 0 
-                        ? `${minutes} min ${seconds} s`
-                        : `${seconds} s`;
-                    timeEstimate.style.display = 'block';
-                } else {
-                    timeEstimate.style.display = 'none';
-                }
+            // Estimation du temps restant
+            const totalDuration = progressPhases.reduce((sum, p) => sum + p.duration, 0);
+            const estimatedRemaining = Math.max(0, totalDuration - totalElapsed);
+            
+            if (estimatedRemaining > 0 && progressValue < 95) {
+                const minutes = Math.floor(estimatedRemaining / 60);
+                const seconds = Math.floor(estimatedRemaining % 60);
+                timeRemaining.textContent = minutes > 0 
+                    ? `${minutes} min ${seconds} s`
+                    : `${seconds} s`;
+                timeEstimate.style.display = 'block';
             } else {
-                progressStatus.textContent = 'Finalisation...';
                 timeEstimate.style.display = 'none';
             }
         }
