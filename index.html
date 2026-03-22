@@ -610,10 +610,9 @@
                 badge.className = 'status-badge updating';
                 badge.textContent = '⚠️ MISE À JOUR EN COURS';
                 warning.style.display = 'block';
-                // N'afficher la modale QUE si l'utilisateur n'a pas cliqué sur sagouin
+                // N'afficher la modale QUE si l'utilisateur n'a pas cliqué sur "J'adore le risque"
                 if (!sagouinClicked) {
                     modal.style.display = 'flex';
-                    startProgressSimulation();
                 }
             } else {
                 badge.className = 'status-badge ready';
@@ -622,120 +621,6 @@
                 modal.style.display = 'none';
                 // Réinitialiser le flag quand la MAJ est terminée
                 sagouinClicked = false;
-                stopProgressSimulation();
-            }
-        }
-        
-        // Variables pour la simulation de progression
-        let progressInterval = null;
-        let progressStartTime = null;
-        
-        // Phases de progression (durées RÉELLES mesurées)
-        const progressPhases = [
-            { name: 'Scraping des résultats...', duration: 47, max: 13 },       // 47s → 13%
-            { name: 'Écriture Google Sheets...', duration: 218, max: 75 },      // 218s → 75%
-            { name: 'Génération graphiques Datawrapper...', duration: 84, max: 100 } // 84s → 100%
-        ];
-        
-        function startProgressSimulation() {
-            stopProgressSimulation(); // Reset si déjà en cours
-            
-            progressStartTime = Date.now();
-            
-            progressInterval = setInterval(() => {
-                updateProgress();
-            }, 500); // MAJ toutes les 500ms
-            
-            updateProgress(); // Premier affichage immédiat
-        }
-        
-        function stopProgressSimulation() {
-            if (progressInterval) {
-                clearInterval(progressInterval);
-                progressInterval = null;
-            }
-            // Mettre à 100% quand terminé
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const progressStatus = document.getElementById('progress-status');
-            const timeEstimate = document.getElementById('time-estimate');
-            
-            if (progressBar) {
-                progressBar.style.width = '100%';
-                progressText.textContent = '100%';
-                progressStatus.textContent = 'Mise à jour terminée !';
-                timeEstimate.style.display = 'none';
-            }
-        }
-        
-        function updateProgress() {
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const progressStatus = document.getElementById('progress-status');
-            const timeEstimate = document.getElementById('time-estimate');
-            const timeRemaining = document.getElementById('time-remaining');
-            
-            if (!progressBar || !progressStartTime) {
-                // Si pas encore démarré, afficher 0%
-                if (progressBar) {
-                    progressBar.style.width = '0%';
-                    progressText.textContent = '0%';
-                    progressStatus.textContent = 'Initialisation...';
-                    timeEstimate.style.display = 'none';
-                }
-                return;
-            }
-            
-            // Temps écoulé TOTAL depuis le début
-            const totalElapsed = (Date.now() - progressStartTime) / 1000;
-            
-            // Trouver dans quelle phase on est
-            let cumulativeDuration = 0;
-            let currentPhaseIndex = 0;
-            let currentPhase = progressPhases[0];
-            let progressValue = 0;
-            
-            for (let i = 0; i < progressPhases.length; i++) {
-                const phase = progressPhases[i];
-                if (totalElapsed < cumulativeDuration + phase.duration) {
-                    // On est dans cette phase
-                    currentPhaseIndex = i;
-                    currentPhase = phase;
-                    
-                    // Calculer la progression dans cette phase
-                    const elapsedInPhase = totalElapsed - cumulativeDuration;
-                    const phaseProgress = Math.min(elapsedInPhase / phase.duration, 1);
-                    const previousMax = i > 0 ? progressPhases[i - 1].max : 0;
-                    progressValue = previousMax + (phase.max - previousMax) * phaseProgress;
-                    break;
-                }
-                cumulativeDuration += phase.duration;
-            }
-            
-            // Si on a dépassé toutes les phases, rester à 100%
-            if (totalElapsed >= cumulativeDuration) {
-                progressValue = 100;
-                currentPhase = progressPhases[progressPhases.length - 1];
-            }
-            
-            // Mettre à jour l'affichage
-            progressBar.style.width = progressValue + '%';
-            progressText.textContent = Math.round(progressValue) + '%';
-            progressStatus.textContent = currentPhase.name;
-            
-            // Estimation du temps restant
-            const totalDuration = progressPhases.reduce((sum, p) => sum + p.duration, 0);
-            const estimatedRemaining = Math.max(0, totalDuration - totalElapsed);
-            
-            if (estimatedRemaining > 0 && progressValue < 100) {
-                const minutes = Math.floor(estimatedRemaining / 60);
-                const seconds = Math.floor(estimatedRemaining % 60);
-                timeRemaining.textContent = minutes > 0 
-                    ? `${minutes} min ${seconds} s`
-                    : `${seconds} s`;
-                timeEstimate.style.display = 'block';
-            } else {
-                timeEstimate.style.display = 'none';
             }
         }
         
@@ -898,16 +783,6 @@
         // Chargement initial
         loadData();
         
-        // Initialiser la barre de progression à 0% au chargement
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const progressStatus = document.getElementById('progress-status');
-        if (progressBar) {
-            progressBar.style.width = '0%';
-            progressText.textContent = '0%';
-            progressStatus.textContent = 'Initialisation...';
-        }
-        
         // Easter egg: clic sur l'urne
         document.getElementById('easter-egg-trigger').addEventListener('click', function() {
             window.location.href = 'easter_egg.html';
@@ -917,25 +792,15 @@
         refreshInterval = setInterval(loadData, 10000);
     </script>
 
-    <!-- Modale de mise à jour avec progression -->
+    <!-- Modale de mise à jour simplifiée -->
     <div id="update-modal" class="update-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-spinner"></div>
             <h2>⚠️ Mise à jour en cours</h2>
             
-            <!-- Barre de progression -->
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-                <div class="progress-text" id="progress-text">0%</div>
-            </div>
-            
-            <!-- Statut détaillé -->
-            <div class="progress-status" id="progress-status">Initialisation...</div>
-            
-            <!-- Estimation temps restant -->
-            <div class="time-estimate" id="time-estimate" style="display: none;">
-                Temps restant estimé : <strong id="time-remaining">—</strong>
-            </div>
+            <p style="margin: 20px 0; font-size: 16px; color: #6b7280;">
+                Les données et graphiques sont en cours de rafraîchissement.
+            </p>
             
             <p style="margin-top: 20px;"><strong>Ne téléchargez pas les graphiques pour le moment.</strong></p>
             <p class="modal-small">Cette fenêtre se fermera automatiquement une fois la mise à jour terminée.</p>
