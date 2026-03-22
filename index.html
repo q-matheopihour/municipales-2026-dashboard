@@ -682,7 +682,7 @@
                             </div>
                             <div class="stat-item">
                                 <label>Dépouillement</label>
-                                <value>${commune['depouillement_%'] || '—'}%</value>
+                                <value>${commune['depouillement_%'] || 'Dépouillement en cours'}${commune['depouillement_%'] && !isNaN(parseFloat(commune['depouillement_%'])) ? '%' : ''}</value>
                             </div>
                         </div>
                         
@@ -699,7 +699,9 @@
                                     </div>
                                     <div class="liste-stats">
                                         <div class="liste-result">
-                                            ${liste['resultat_%'] || '0'}%
+                                            ${(liste['resultat_%'] !== undefined && liste['resultat_%'] !== null && liste['resultat_%'] !== '') 
+                                                ? parseFloat(liste['resultat_%']).toFixed(2) 
+                                                : '0,00'}%
                                         </div>
                                         ${liste.sieges ? `<div class="liste-sieges">${liste.sieges} siège${liste.sieges > 1 ? 's' : ''}</div>` : ''}
                                     </div>
