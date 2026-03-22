@@ -898,6 +898,16 @@
         // Chargement initial
         loadData();
         
+        // Initialiser la barre de progression à 0% au chargement
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const progressStatus = document.getElementById('progress-status');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+            progressStatus.textContent = 'Initialisation...';
+        }
+        
         // Easter egg: clic sur l'urne
         document.getElementById('easter-egg-trigger').addEventListener('click', function() {
             window.location.href = 'easter_egg.html';
